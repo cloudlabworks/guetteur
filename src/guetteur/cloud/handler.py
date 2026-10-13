@@ -5,9 +5,9 @@ Routes
   GET  /api/scenarios         list of synthetic scenarios
   POST /api/run               {scenario, seed, planner, gate} -> trace, claims, alerts, score, receipt results   (OpenCV 5 runs here)
   POST /api/verify            {claim, tamper?} -> PASS/FAIL from BOTH receipt checks, re-run on the pinned synthetic input
-  POST /api/evidence          edge -> cloud evidence bundle (JSON only; pictures rejected)
-  GET  /api/approvals         pending human-approval requests
-  POST /api/approvals/{id}    {approve: bool, by: str}
+  POST /api/evidence          edge -> cloud evidence bundle (JSON only; pictures rejected)     [needs x-edge-key]
+  GET  /api/approvals         pending human-approval requests                                   [needs x-edge-key]
+  POST /api/approvals/{id}    {approve: bool, by: str}                                          [needs x-edge-key]
   GET  /healthz
 
 Public routes only accept scenario names and small JSON; they never accept images or arbitrary uploads, so a visitor
@@ -17,6 +17,7 @@ cannot make the function process anything but the built-in synthetic scenes.
 from __future__ import annotations
 
 import base64
+import hmac
 import json
 import os
 import time
@@ -41,6 +42,19 @@ def _resp(code: int, body: Any, ctype: str = "application/json") -> dict:
             "body": body if isinstance(body, str) else json.dumps(body, default=str)}
 
 
+PROTECTED = ("/api/evidence", "/api/approvals")
+
+
+def _authorized(event: dict, path: str) -> bool:
+    """Evidence intake and approvals change state or release alerts, so they need the shared edge key.
+    No key configured means these routes are closed (fail shut), never open."""
+    if not path.startswith(PROTECTED):
+        return True
+    want = os.environ.get("EDGE_KEY", "")
+    got = {k.lower(): v for k, v in (event.get("headers") or {}).items()}.get("x-edge-key", "")
+    return bool(want) and len(want) >= 20 and hmac.compare_digest(want.encode(), got.encode())
+
+
 def _body(event: dict) -> dict:
     raw = event.get("body") or "{}"
     if event.get("isBase64Encoded"):
@@ -53,9 +67,13 @@ def _body(event: dict) -> dict:
     return out
 
 
-def run_checks(claim: dict) -> dict:
-    """Both independent receipt checks, in-process. The claim pins its input by digest."""
-    depth = check_numpy.load_depth(claim)
+def run_checks(claim: dict, depth: np.ndarray | None = None) -> dict:
+    """Both independent receipt checks, in-process. The claim pins its input by digest. Pass `depth` to reuse an
+    already-rendered stack (its digest is still compared with the claim's) instead of re-rendering the clip."""
+    if depth is None:
+        depth = check_numpy.load_depth(claim)
+    elif depth_digest(depth) != claim["clip"]["digest"]:
+        return {"proven": False, "error": "clip digest mismatch"}
     res = {}
     for name, mod in (("numpy-region-stats", check_numpy), ("opencv-region-stats", check_cv)):
         ok, msg = mod.check(claim, depth)
@@ -69,6 +87,8 @@ def handle(event: dict, context: Any = None) -> dict:
     method = (event.get("requestContext", {}).get("http", {}).get("method") or event.get("httpMethod") or "GET").upper()
     path = event.get("rawPath") or event.get("path") or "/"
     try:
+        if not _authorized(event, path):
+            return _resp(403, {"error": "forbidden: x-edge-key required (and EDGE_KEY must be configured on the server)"})
         if method == "GET" and path in ("/", "/index.html"):
             return _resp(200, (HERE / "dashboard.html").read_text(), "text/html; charset=utf-8")
         if method == "GET" and path == "/healthz":
@@ -85,7 +105,7 @@ def handle(event: dict, context: Any = None) -> dict:
             if planner not in ("rule", "naive-guarded", "naive") or gate not in ("approve", "deny", "timeout"):
                 return _resp(400, {"error": "planner in {rule, naive-guarded, naive}, gate in {approve, deny, timeout}"})
             res, meta = run_scenario(name, seed, planner, gate)
-            checks = {c.id: run_checks(c.__dict__) for c in res.claims[:6]}
+            checks = {c.id: run_checks(c.__dict__, res.depth) for c in res.claims[:6]}
             return _resp(200, {
                 "synthetic": True, "scenario": name, "seed": seed, "planner": res.planner, "gate": gate, "note": meta["note"],
                 "score": score_run(res, meta), "counters": res.counters,

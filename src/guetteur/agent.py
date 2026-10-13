@@ -80,6 +80,7 @@ class RunResult:
     perception_ms: list[float] = field(default_factory=list)   # per zone-frame
     planner_ms: list[float] = field(default_factory=list)      # per planner call
     frame_ms: list[float] = field(default_factory=list)        # per frame, all zones + planner + executor
+    depth: object = None                                        # the input stack (kept in memory so callers can re-check without re-rendering)
 
 
 @dataclass
@@ -107,7 +108,7 @@ class Agent:
     def run(self, depth: np.ndarray, run_id: str, clip_ref: dict) -> RunResult:
         P = Perception(self.zones, self.params)
         P.calibrate(depth[:CALIB_FRAMES])
-        res = RunResult(run=run_id, planner=getattr(self.planner, "name", "planner"))
+        res = RunResult(run=run_id, planner=getattr(self.planner, "name", "planner"), depth=depth)
         c = dict(frames=0, planner_calls=0, skipped_not_salient=0, skipped_paused=0, rechecks=0, pauses=0, degrades=0,
                  compensations=0, requests=0, approved=0, denied=0, timeouts=0, policy_rejections=0)
         rts = {z.name: _RT() for z in self.zones}

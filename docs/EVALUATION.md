@@ -19,6 +19,8 @@ Receipts: 21/21 honest ledgers fully proven by the vendored prove-it-done verifi
 Tamper tests (claim inflated / pointed at wrong pixels or time / re-pointed at another recording; `file:` hash recomputed by the attacker): 24/24 rejected.
 Planner calls: 1693 on 4605 frames (0.37 per frame across all scenarios, which include long eventful stretches; the `empty` control triggers 9 calls in 375 frames).
 
+**Tolerance.** A claim passes if the re-measured value is within max(8 mm, 25% of the claimed value) (sensor: 0.08 coverage, drift: 0.01). Inflation beyond that is rejected; smaller inflation passes by design. The tamper test inflates by 2x, plus wrong place/time and wrong input.
+
 **Honest note on the tamper test.** The first run rejected 23/24. The miss was `lens_obstructed` with the *wrong place* tamper: the fault covers the whole frame, so relocating the claimed region leaves the claim true. That tamper is therefore defined as *wrong time* for sensor and drift claims (evidence window moved to the calibration period), and as *wrong pixels* for object claims; the table above is for the corrected definition.
 
 ## Per scenario (seed 0 shown; all seeds in `eval/results.json`)

@@ -35,6 +35,7 @@ L += ["", f"Receipts: {r['receipts_verified']['all_proven']}/{r['receipts_verifi
       f"{r['tamper_rejected']['rejected']}/{r['tamper_rejected']['attempts']} rejected.",
       f"Planner calls: {r['planner_calls']} on {r['frames']} frames ({r['planner_call_rate']:.2f} per frame across all scenarios, which include long eventful stretches; "
       f"the `empty` control triggers {sum(x['counters']['planner_calls'] for x in r['rows'] if x['scenario'] == 'empty')} calls in {sum(x['counters']['frames'] for x in r['rows'] if x['scenario'] == 'empty')} frames).", "",
+      "**Tolerance.** A claim passes if the re-measured value is within max(8 mm, 25% of the claimed value) (sensor: 0.08 coverage, drift: 0.01). Inflation beyond that is rejected; smaller inflation passes by design. The tamper test inflates by 2x, plus wrong place/time and wrong input.", "",
       "**Honest note on the tamper test.** The first run rejected 23/24. The miss was `lens_obstructed` with the *wrong place* tamper: the fault covers the whole frame, so relocating the claimed region leaves the claim true. "
       "That tamper is therefore defined as *wrong time* for sensor and drift claims (evidence window moved to the calibration period), and as *wrong pixels* for object claims; the table above is for the corrected definition.", "",
       "## Per scenario (seed 0 shown; all seeds in `eval/results.json`)", "",

@@ -30,14 +30,15 @@ Guetteur is a privacy-first active-perception agent. It watches a space through 
 flowchart LR
   subgraph EDGE["Edge: site network (nothing pictorial leaves)"]
     CAM["OAK-D PoE<br/>colour frames stay on camera<br/>detections + stereo depth only"]
-    OE["oak-events<br/>(MIT, MCP) depth grid + person events"]
+    OE["oak-events (MIT, MCP)<br/>person events + 6x8 depth-cell events<br/>(shipped; never keeps a depth frame)"]
     subgraph LOOP["Guetteur agent loop (Python 3.12)"]
       PERC["OpenCV 5 perception<br/>inpaint / medianBlur / morphology<br/>connectedComponentsWithStats / Farneback"]
       PLAN["Planner interface<br/>RulePlanner now / LLM slot later"]
       EXEC["Executor<br/>autonomy policy + evidence guardrails"]
       GATE{{"Human gate<br/>default on silence: DENY"}}
     end
-    CAM --> OE --> PERC
+    CAM -->|"depth frames: new opt-in tap (section 3.3)"| PERC
+    CAM --> OE
     PERC -->|"evidence JSON (no pixels)"| PLAN --> EXEC
     EXEC -->|"recheck / pause / compensate / degrade"| PERC
     EXEC -->|"request_approval"| GATE
@@ -46,9 +47,9 @@ flowchart LR
   subgraph AWS["AWS (arm64 / Graviton, serverless, pay-per-use)"]
     APIGW["API Gateway HTTP API<br/>throttled, HTTPS"]
     LAM["Lambda arm64<br/>OpenCV 5 loop + both receipt checks<br/>(synthetic scenes for judges)"]
-    EV["Lambda: evidence intake<br/>JSON only, pictures rejected"]
-    DDB[("DynamoDB TTL<br/>approvals + evidence")]
-    S3[("S3 7-day<br/>opt-in depth snippets")]
+    EV["PHASE 2: evidence intake<br/>x-edge-key, JSON only, pictures rejected"]
+    DDB[("PHASE 2: DynamoDB TTL<br/>approvals + evidence")]
+    S3[("PHASE 2: S3 7-day<br/>opt-in depth snippets")]
     CW["CloudWatch logs, alarms,<br/>X-Ray, Budget"]
   end
   JUDGE["Judge browser<br/>dashboard + tamper button"] --> APIGW --> LAM
@@ -83,7 +84,11 @@ flowchart TD
 
 The loop is closed in two places that matter for the award: `recheck_zone` changes *how OpenCV is called next* (frames integrated, threshold `k`), and the approval request is sized by what OpenCV measured. A fixed-script pipeline cannot do either (ablation in section 9).
 
-### 3.3 Data flow, concretely
+### 3.3 Integration with oak-events: what exists and what is new
+
+`oak-events` (shipped) turns each depth frame into a 6x8 grid of cell medians **in memory and drops the frame**; its privacy claim #2 is that no depth map is stored, and it exposes no frame output. Guetteur's OpenCV 5 pipeline needs full depth frames, so the real-camera input is **new code**, not an existing interface. Two options, to be decided on Day 4 after reading the DepthAI pipeline: (a) a hook inside oak-events' camera layer that hands the frame to Guetteur before it is dropped, or (b) a separate DepthAI pipeline in Guetteur (stereo depth only; colour never linked to a host queue, same privacy environment settings). Either way the **clip recorder is new, opt-in code that deliberately does the one thing oak-events promises not to do (keep depth frames), for evaluation only**, with consent, writing to a local directory, and never enabled in the deployed product. The importer to `.npz` on Day 4 belongs to that recorder. Real stereo frames will not match the synthetic assumptions (320x240, 72° field of view, Gaussian noise): `F_PX`, the noise model and the zone geometry are refit on real frames on Days 4–5 before any real-data number is reported.
+
+### 3.4 Data flow, concretely
 
 | Step | Data | Where | Leaves the edge? |
 | --- | --- | --- | --- |
@@ -91,14 +96,14 @@ The loop is closed in two places that matter for the award: `recheck_zone` chang
 | perceive | depth `uint16[240,320]` per frame | host RAM | no; frame discarded after analysis |
 | evidence | JSON: scalars, up to 3 blobs, 6x8 signed-mm grid | host | only on escalation, <= 16 KB, pictures rejected by schema |
 | claim | JSON: region, frame windows, asserted value, input digest | host disk | optional, same bundle |
-| receipt | re-check of the claim against the **pinned input** | wherever the input is | see 3.4 |
+| receipt | re-check of the claim against the **pinned input** | wherever the input is | see 3.5 |
 
-### 3.4 Privacy model, and exactly what a receipt re-runs against
+### 3.5 Privacy model, and exactly what a receipt re-runs against
 
 * **Privacy comes from depth-only sensing.** Colour never reaches the host (inherited from `oak-events`: the colour sensor feeds the on-chip detector only). There is no host-side "redaction" step because there is nothing to redact: no code path reads, writes or sends a picture, and a test (`tests/test_synth_and_privacy.py`) scans code, data and run outputs for image/video files and for imaging calls. Depth still reveals occupancy, silhouettes at close range and timing, so event files are treated as sensitive and kept local.
 * **Receipts need an input to re-run against. Two modes, stated plainly:**
   1. *Recorded or synthetic clips* (demo, evaluation, judge endpoint): the claim pins the clip by content digest (SHA-256 over the depth bytes); `file:` and digest checks fix it. Anyone can re-run the checks.
-  2. *Live operation*: the raw depth stream is **not retained**. The receipt then re-runs only against the reduced evidence (grid and blob statistics) or against a **short depth snippet kept only after a human approved an escalation** (7-day S3 lifecycle, opt-in). A live claim whose snippet was not kept is labelled "evidence reduced; not re-derivable from raw" in the ledger, never presented as fully re-checkable.
+  2. *Live operation*: the raw depth stream is **not retained**. The receipt then re-runs only against the reduced evidence (grid and blob statistics) or against a **short depth snippet kept only after a human approved an escalation** (7-day S3 lifecycle, opt-in). A live claim whose snippet was not kept will be labelled "evidence reduced; not re-derivable from raw" in the ledger and never presented as fully re-checkable. **Planned: not implemented yet** (the prototype only handles pinned clips).
 * **What the judge endpoint serves is synthetic**, labelled in the page and in every API response (`synthetic: true`). The endpoint refuses arbitrary uploads and visitor-chosen paths.
 
 ## 4. OpenCV 5 usage (substantive, and central)
@@ -125,13 +130,13 @@ Per-stage timings on this Mac are in `eval/runtime.json` (`guetteur bench`). Ope
 * **Autonomy tiers (enforced by the executor, not by the planner):** observe, re-look, re-tune and compensate are autonomous and bounded (recheck n in [3,40], at most 3 rechecks per episode, drift compensation capped at ±20% total); anything that tells a human something happened needs `request_approval`.
 * **Evidence guardrails:** an object claim is refused unless the *current* observation shows a confident, persistent, non-occupant blob in a healthy zone; a sensor claim is refused if coverage and gain look healthy. A planner (or LLM) cannot assert what the pixels do not show.
 * **Attention gating:** the planner is only called when the observation is salient (quiet scenes: ~1% of zone-frames), which is also what makes an LLM planner affordable.
-* **Human control:** `HumanGate.decide()` returns approve, deny, or `None` on no answer; `None` is deny. After a decision there is a cooldown so a persistent condition is not nagged every frame. Approval adopts the new scene as baseline. In the cloud, approvals live in DynamoDB with a TTL and expire to `denied_timeout`.
-* **Observability:** every planner call writes a trace record (frame, zone, observation summary, action, rationale, cited numbers, outcome, planner ms) to `trace.jsonl`; counters for planner calls, rechecks, pauses, rejections, timeouts; the Lambda writes structured logs and metrics (CloudWatch) and an X-Ray trace.
+* **Human control:** `HumanGate.decide()` returns approve, deny, or `None` on no answer; `None` is deny. After a decision there is a cooldown so a persistent condition is not nagged every frame. Approval adopts the new scene as baseline. In the cloud (phase 2, **draft code with local tests only, never run on AWS**), approvals would live in DynamoDB with a TTL and expire to `denied_timeout`; those routes fail shut unless a server-side `EDGE_KEY` is configured and sent, so an anonymous visitor cannot approve anything. The first deploy leaves them out entirely.
+* **Observability:** every planner call writes a trace record (frame, zone, observation summary, action, rationale, cited numbers, outcome, planner ms) to `trace.jsonl`; counters for planner calls, rechecks, pauses, rejections, timeouts; local runs write the JSONL trace and counters today; **planned, not built:** Lambda structured logs and metrics in CloudWatch (the template enables X-Ray tracing and alarms on errors/throttles, untested).
 * **Failure handling:** noise burst → degrade zone and wait; partial depth loss → degrade, then escalate if it persists; total loss → confirm for 3 frames then escalate; drift → compensate, escalate beyond 20%; recheck budget exhausted → drop, do not claim.
 
 ## 6. Receipts (prove-it-done, vendored)
 
-Each claim is a done step in a ledger with three receipts through different instruments: `file:` (SHA-256 of the claim JSON), `cmd:` numpy-only re-check (never imports cv2; tested), `cmd:` OpenCV frame-statistics re-check. `--min-instruments 2` is required. Independence is partial and we say so: the two checks share the raw input and the claimed region/window, but not each other's estimator or the live pipeline's thresholds. Negative tests (`tests/test_receipts.py`): inflating the claimed value, pointing it at the wrong pixels (or time), re-pointing it at another recording, and editing the claim file each make the verifier exit 1 — including when the attacker recomputes the `file:` hash.
+Each claim is a done step in a ledger with three receipts through different instruments: `file:` (SHA-256 of the claim JSON), `cmd:` numpy-only re-check (never imports cv2; tested), `cmd:` OpenCV frame-statistics re-check. `--min-instruments 2` is required. Independence is partial and we say so: the two checks share the raw input and the claimed region/window, but not each other's estimator or the live pipeline's thresholds. Negative tests (`tests/test_receipts.py`): inflating the claimed value 2x, pointing it at the wrong pixels (objects) or wrong time (sensor/drift), re-pointing it at another recording, and editing the claim file each make the verifier exit 1 — including when the attacker recomputes the `file:` hash. **Tolerance, stated plainly:** a claim passes if the re-measured value is within max(8 mm, 25% of the claim) (coverage ±0.08, gain ±0.01), so small inflations pass by design; the receipts prove a claim is *consistent with the pinned input*, not that the input is the right one.
 
 ## 7. AWS services, free-tier fit, and cost note
 
@@ -139,10 +144,10 @@ All serverless, pay-per-use or free-tier eligible; no idle resources (no NAT gat
 
 | Service | Role | Cost note |
 | --- | --- | --- |
-| Lambda (arm64/Graviton, python3.12, 1024 MB) | judge dashboard, `/api/run` (OpenCV 5 loop), `/api/verify` (both receipt checks), evidence intake | within Lambda's always-free monthly allowance at demo volumes; reserved concurrency 5 caps it |
+| Lambda (arm64/Graviton, python3.12, 1769 MB) | judge dashboard, `/api/run` (OpenCV 5 loop), `/api/verify` (both receipt checks); phase 2 adds authenticated evidence intake | within Lambda's always-free monthly allowance at demo volumes (unverified for a new account); reserved concurrency 5 caps it. Locally the slowest scenario takes ~2.6 s end to end; Lambda timing is **unmeasured** (25 s timeout) |
 | API Gateway HTTP API | HTTPS front door, throttled | priced per request; within free-tier allowance for new accounts at demo volumes |
-| DynamoDB on-demand + TTL | approvals, evidence bundles | far below free allowance; TTL clears it |
-| S3 (private, SSE, 7-day lifecycle) | opt-in depth snippets after human approval | negligible |
+| *(phase 2)* DynamoDB on-demand + TTL | approvals, evidence bundles | far below free allowance; TTL clears it |
+| *(phase 2)* S3 (private, SSE, 7-day lifecycle) | opt-in depth snippets after human approval | negligible |
 | CloudWatch Logs/Alarms, X-Ray, SNS, Budgets | observability and cost guard | within free allowances at this volume; a budget alert at 50%/80% of a cap the owner sets |
 
 * Credits: DP-Overview "FREE AWS CREDITS FOR NEW MEMBERS" describes $100 in Free Tier credits at Free Plan sign-up (plus more via activities), subject to current Free Tier terms and expiry; we have not verified current terms, and no account exists yet. The design is meant to stay within those credits with margin; the throttles, reserved concurrency and budget alert are the guard rails.
@@ -211,12 +216,12 @@ Sub-noise changes are invisible; depth cannot name objects; a person partly outs
 | 0 | Mon Oct 12 | prototype, tests, design, template draft (this work) | pytest green, eval + bench logs saved |
 | 1 | Tue Oct 13 | **Alex: confirm eligibility/registration; decide go/no-go**; create repo `cloudlabworks/guetteur` after identity scan | answer recorded; repo exists |
 | 2 | Wed Oct 14 | AWS account (Free Plan), budget alert, `sam validate`; `sam build --use-container` | template validates, build ok |
-| 3 | Thu Oct 15 | first deploy; `/healthz` shows `opencv 5.0.0`, `aarch64`; dashboard loads from the public URL | curl receipt passes |
-| 4 | Fri Oct 16 | record real depth clips (Alex + OAK-D, ~1 h); clip import tool (`oak-events` depth → `.npz`) | 3 labelled clips on disk (outside git if large) |
-| 5 | Sat Oct 17 | run real clips through the loop; tune only on a held-out split; add real-data metrics | numbers in `docs/EVALUATION.md` |
+| 3 | Thu Oct 15 | first deploy = public **read-only** endpoint (no evidence/approval routes); `/healthz` shows `opencv 5.0.0`, `aarch64`; time every scenario on Lambda against the 25 s timeout | curl receipt passes; timings recorded; repo stays private until then |
+| 4 | Fri Oct 16 | decide the depth tap (section 3.3); new opt-in recorder writes depth-only `.npz`; record real clips (Alex + OAK-D, ~1 h) | 3 labelled clips on disk (outside git if large) |
+| 5 | Sat Oct 17 | **refit `F_PX`, noise model and zones on real frames** (they will differ from 320x240 / 72° / Gaussian); run real clips through the loop; tune only on a held-out split; add real-data metrics | numbers in `docs/EVALUATION.md` |
 | 6 | Sun Oct 18 | LLM planner wired to Bedrock behind the same policy (only if account/model access is straightforward; otherwise leave as interface and say so) | rejection tests pass with the real model |
-| 7 | Mon Oct 19 | evidence intake hardening: `x-edge-key`, S3 snippet re-check function | negative tests pass |
-| 8 | Tue Oct 20 | edge → cloud path end to end with a real clip; approvals from the dashboard | approval round trip in logs |
+| 7 | Mon Oct 19 | deploy phase 2: DynamoDB, S3, evidence/approval routes behind `x-edge-key`; **deployed negative test** (no key / wrong key → 403); S3 snippet re-check function | negative tests pass on AWS |
+| 8 | Tue Oct 20 | edge → cloud path end to end with a real clip; approval round trip through the cloud; **replay of Alex's recorded clips on Lambda** | approval round trip in logs; real-clip result from the endpoint |
 | 9 | Wed Oct 21 | technical report draft (from this document + results) | draft in `docs/REPORT.md` |
 | 10 | Thu Oct 22 | architecture + workflow diagrams final; load/abuse test of the endpoint; cost check against credits | throttle and alarm demonstrated |
 | 11 | Fri Oct 23 | video recording (script in section 8); screenshots | raw video |
@@ -224,22 +229,22 @@ Sub-noise changes are invisible; depth cannot name objects; a person partly outs
 | 13 | Sun Oct 25 | **submit** (Alex presses the button); endpoint check from outside the network | submission confirmation saved |
 | 14 | Mon Oct 26 | buffer only; no new features; deadline 11:45pm PDT | — |
 
-Cut order if time slips: COOL probe → LLM wiring → edge→cloud path → live-camera segment. Never cut: deployed endpoint, receipts + tamper demo, failure cases, honest labelling.
+Cut order if time slips: COOL probe → LLM wiring → live-camera segment in the video. **Never cut:** deployed endpoint; receipts + tamper demo; failure cases; honest labelling; an approval round trip through the cloud; replay of the recorded real clips on Lambda (without them AWS only replays synthetic scenes, which weakens "a meaningful component on AWS", OCV "Requirements for Participation").
 
 ## 12. What needs Alex
 
 1. **Eligibility check (blocking).** Is Team Drift registered on Devpost and did it submit the grant proposal? (Section 0, `docs/RULES_NOTES.md` #1.) If no, decide whether to ask `competition@opencv.org` (the contact on OCV "Contact & Questions") — we will not contact anyone on our own.
 2. **AWS account**: create a Free Plan account under Cloud Lab Works (never a personal or employer account); set the budget figure; enable MFA; confirm the owner's alert email. We have no AWS credentials and did not look for any.
-3. **Budget approval**: confirm that staying within Free Tier/promo credits is the rule, and that Bedrock model calls (Day 6) are in or out.
+3. **Budget decision**: choose the monthly budget-alert figure (the template deliberately has no default) and confirm that staying within Free Tier/promo credits is the rule; say whether Bedrock model calls (Day 6) are in or out.
 4. **Camera time**: ~1 hour with the OAK-D PoE on Day 4 (depth-only recordings of an empty shelf/door, a walk-through, an item removed) and a few minutes of labelling. No faces or identifiable people in any clip; anyone in frame must consent.
 5. **Press submit** on Oct 25; the team representative handles the Devpost form (DP-Rules "ELIGIBILITY AND FAIR PLAY").
-6. **Repo publication**: create `cloudlabworks/guetteur`, run the identity scan (noreply email, no employer material) before the first push.
+6. **Repo publication**: create `cloudlabworks/guetteur` as **private** (OCV "Final Submission Package" allows a private, judge-accessible repository), run the identity scan (noreply email, no employer material) before the first push, and make it judge-accessible only at submission.
 
 ## 13. Risks (ranked)
 
 1. Not eligible / no proposal on file (section 0).
 2. Synthetic-only evidence reads as weak "technical execution"; mitigated only by real clips (Day 4–5).
-3. First AWS deployment problems (arm64 layer build needs Docker; Lambda 25 s ceiling vs ~2 s runs; cold start); Day 2–3 buffer.
+3. First AWS deployment problems (arm64 layer build needs Docker; Lambda 25 s timeout vs ~2.6 s worst case locally with Lambda timing unmeasured; cold start); Day 2–3 buffer.
 4. Overfit to our own generator: thresholds tuned on the family they are scored on.
 5. "Agentic" read as rules-with-extra-steps: the LLM slot is not wired until Day 6; the award text allows "any framework or model" (OCV "Focus Paths"), and the loop still satisfies "image or video results must influence a subsequent plan, tool call, action, or request for human approval".
 6. Cost or abuse on a public endpoint: throttle, reserved concurrency, budget alert, no uploads.

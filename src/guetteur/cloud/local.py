@@ -12,7 +12,8 @@ class _H(BaseHTTPRequestHandler):
     def _go(self) -> None:
         n = int(self.headers.get("content-length") or 0)
         body = self.rfile.read(min(n, 30_000)).decode() if n else ""
-        r = handle({"requestContext": {"http": {"method": self.command}}, "rawPath": self.path.split("?")[0], "body": body})
+        r = handle({"requestContext": {"http": {"method": self.command}}, "rawPath": self.path.split("?")[0], "body": body,
+                     "headers": dict(self.headers.items())})
         data = r["body"].encode()
         self.send_response(r["statusCode"])
         for k, v in r["headers"].items():

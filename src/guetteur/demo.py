@@ -61,7 +61,7 @@ def demo(out: str = "runs") -> int:
     v = verify_ledger(led)
     print("\n" + "\n".join(l for l in v.output.splitlines() if l.startswith(("PASS", "FAIL", "  ->", "summary"))))
 
-    _hdr("6. A false claim cannot pass: inflate it, point it at the wrong pixels, re-point it at another recording")
+    _hdr("6. Doctored claims are caught (tolerance is max(8 mm, 25%), so small inflations pass by design)")
     claim = Path(out) / res.run / "claims" / "c1.json"
     bad = 0
     for how in ("inflate", "wrong_place", "other_input"):

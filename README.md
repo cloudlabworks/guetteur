@@ -26,7 +26,7 @@ depth frames ──> OpenCV 5 perception ──> evidence (JSON, no pixels) ─�
 * **Presence is not a change.** A person-sized blob nearer than the scene pauses that zone.
 * **Sensor trouble is not a scene event.** Noise bursts degrade the zone, gain drift is compensated, lost depth escalates as a camera fault.
 * **Default is deny.** If no human answers the approval request, nothing is published.
-* **Claims carry receipts.** Each claim is re-checked by two independent estimators (numpy-only, and OpenCV frame statistics) against the pinned input, and the vendored [prove-it-done](https://github.com/issaquahd/prove-it-done) verifier judges the ledger. Tampered claims fail.
+* **Claims carry receipts.** Each claim is re-checked by two independent estimators (numpy-only, and OpenCV frame statistics) against the pinned input, and the vendored [prove-it-done](https://github.com/issaquahd/prove-it-done) verifier judges the ledger. Claims doctored beyond the tolerance (max(8 mm, 25% of the value)) fail: inflated, pointed at the wrong pixels or time, or re-pointed at another recording. Smaller inflations pass by design.
 
 ## Quick start (macOS/Linux, Python 3.12, [uv](https://docs.astral.sh/uv/))
 
@@ -67,6 +67,7 @@ Re-verify any ledger yourself: `uv run guetteur verify-ledger runs/<run>/receipt
 * Depth cannot tell *what* an object is; claims say "a region became farther by 24 mm", not "a bottle was removed".
 * Changes under ~1 sigma after filtering are invisible (documented miss: `subthreshold_item_removed`).
 * The LLM planner is an interface plus tests with a fake model; no model is called.
+* The edge/cloud approval path (DynamoDB, S3, authenticated routes) is code plus local tests only; the first AWS deploy is planned as a public read-only endpoint (`INFRA/README.md`).
 * AWS pieces (`INFRA/`, `DynamoStore`) are a draft that has never run on AWS.
 
 ## License

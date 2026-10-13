@@ -4,8 +4,12 @@ from guetteur.cloud import handler as H
 from guetteur.cloud.store import MemoryStore
 
 
-def call(method, path, body=None):
-    r = H.handle({"requestContext": {"http": {"method": method}}, "rawPath": path, "body": json.dumps(body) if body is not None else None})
+KEY = "k" * 32
+
+
+def call(method, path, body=None, headers=None):
+    r = H.handle({"requestContext": {"http": {"method": method}}, "rawPath": path, "body": json.dumps(body) if body is not None else None,
+                  "headers": headers or {}})
     return r["statusCode"], (json.loads(r["body"]) if r["headers"]["content-type"] == "application/json" else r["body"])
 
 
@@ -54,23 +58,54 @@ def test_bad_inputs_are_rejected_cleanly():
     assert r["statusCode"] == 400
 
 
-def test_evidence_endpoint_refuses_pictures():
-    assert call("POST", "/api/evidence", {"claim": {"id": "c1"}, "image": "AAAA"})[0] == 422
-    assert call("POST", "/api/evidence", {"claim": {"id": "c1"}, "summary": "ok"})[0] == 202
+def test_write_routes_fail_shut_without_a_key_and_with_a_wrong_key(monkeypatch):
+    monkeypatch.delenv("EDGE_KEY", raising=False)
+    for m, p in (("POST", "/api/evidence"), ("GET", "/api/approvals"), ("POST", "/api/approvals/abc")):
+        assert call(m, p, {"claim": {}}, {"x-edge-key": KEY})[0] == 403          # no key configured: closed even if one is sent
+    monkeypatch.setenv("EDGE_KEY", KEY)
+    for m, p in (("POST", "/api/evidence"), ("GET", "/api/approvals"), ("POST", "/api/approvals/abc")):
+        assert call(m, p, {"claim": {}})[0] == 403
+        assert call(m, p, {"claim": {}}, {"x-edge-key": "wrong" * 8})[0] == 403
+    monkeypatch.setenv("EDGE_KEY", "short")
+    assert call("GET", "/api/approvals", None, {"x-edge-key": "short"})[0] == 403       # weak keys are refused too
+    assert call("GET", "/api/scenarios")[0] == 200                                      # public read-only routes are unaffected
+
+
+def test_evidence_endpoint_refuses_pictures(monkeypatch):
+    monkeypatch.setenv("EDGE_KEY", KEY)
+    hdr = {"X-Edge-Key": KEY}
+    assert call("POST", "/api/evidence", {"claim": {"id": "c1"}, "image": "AAAA"}, hdr)[0] == 422
+    assert call("POST", "/api/evidence", {"claim": {"id": "c1"}, "summary": "ok"}, hdr)[0] == 202
+
+
+def test_every_scenario_runs_through_the_endpoint_fast_and_proven():
+    """The judge endpoint must finish well inside the 25 s function timeout for every scenario (slow_drift has the most claims)."""
+    import time
+    worst = 0.0
+    for name in __import__("guetteur.synth", fromlist=["x"]).scenarios():
+        t = time.perf_counter()
+        code, d = call("POST", "/api/run", {"scenario": name, "seed": 0})
+        worst = max(worst, time.perf_counter() - t)
+        assert code == 200 and all(v["proven"] for v in d["receipts"].values()), name
+    assert worst < 12.0, f"slowest scenario took {worst:.1f}s here; Lambda will be slower"
 
 
 def test_approval_flow_and_default_deny(monkeypatch):
     store = MemoryStore()
     monkeypatch.setattr(H, "_STORE", store)
-    _, r = call("POST", "/api/evidence", {"claim": {"id": "c1"}, "needs_approval": True})
+    monkeypatch.setenv("EDGE_KEY", KEY)
+
+    def keyed(method, path, body=None):                    # every call in this test carries the edge key
+        return call(method, path, body, {"x-edge-key": KEY})
+    _, r = keyed("POST", "/api/evidence", {"claim": {"id": "c1"}, "needs_approval": True})
     aid = r["approval_id"]
-    assert [a["status"] for a in call("GET", "/api/approvals")[1]] == ["pending"]
-    code, a = call("POST", f"/api/approvals/{aid}", {"approve": True, "by": "alex"})
+    assert [a["status"] for a in keyed("GET", "/api/approvals")[1]] == ["pending"]
+    code, a = keyed("POST", f"/api/approvals/{aid}", {"approve": True, "by": "alex"})
     assert code == 200 and a["status"] == "approved" and a["by"] == "alex"
-    assert call("POST", f"/api/approvals/{aid}", {"approve": False})[0] == 400          # already decided
-    assert call("POST", "/api/approvals/nope", {"approve": True})[0] == 404
-    _, r2 = call("POST", "/api/evidence", {"claim": {"id": "c2"}, "needs_approval": True})
+    assert keyed("POST", f"/api/approvals/{aid}", {"approve": False})[0] == 400          # already decided
+    assert keyed("POST", "/api/approvals/nope", {"approve": True})[0] == 404
+    _, r2 = keyed("POST", "/api/evidence", {"claim": {"id": "c2"}, "needs_approval": True})
     store.approvals[r2["approval_id"]]["expires"] = 0                                    # nobody answered in time
-    statuses = {a["id"]: a["status"] for a in call("GET", "/api/approvals")[1]}
+    statuses = {a["id"]: a["status"] for a in keyed("GET", "/api/approvals")[1]}
     assert statuses[r2["approval_id"]] == "denied_timeout"
-    assert call("POST", f"/api/approvals/{r2['approval_id']}", {"approve": True})[0] == 400
+    assert keyed("POST", f"/api/approvals/{r2['approval_id']}", {"approve": True})[0] == 400

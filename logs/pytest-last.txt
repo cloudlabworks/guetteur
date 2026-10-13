@@ -3,13 +3,13 @@ platform darwin -- Python 3.12.15, pytest-9.1.1, pluggy-1.6.0
 rootdir: <path>
 configfile: pyproject.toml
 testpaths: tests
-collected 73 items
+collected 75 items
 
-tests/test_agent_scenarios.py .................................          [ 45%]
-tests/test_cloud_handler.py .......                                      [ 54%]
-tests/test_perception.py .......                                         [ 64%]
+tests/test_agent_scenarios.py .................................          [ 44%]
+tests/test_cloud_handler.py .........                                    [ 56%]
+tests/test_perception.py .......                                         [ 65%]
 tests/test_planner.py .............                                      [ 82%]
 tests/test_receipts.py ........                                          [ 93%]
 tests/test_synth_and_privacy.py .....                                    [100%]
 
-======================== 73 passed in 102.21s (0:01:42) ========================
+======================== 75 passed in 106.29s (0:01:46) ========================
