@@ -150,7 +150,7 @@ All serverless, pay-per-use or free-tier eligible; no idle resources (no NAT gat
 | *(phase 2)* S3 (private, SSE, 7-day lifecycle) | opt-in depth snippets after human approval | negligible |
 | CloudWatch Logs/Alarms, X-Ray, SNS, Budgets | observability and cost guard | within free allowances at this volume; a budget alert at 50%/80% of a cap the owner sets |
 
-* Credits: DP-Overview "FREE AWS CREDITS FOR NEW MEMBERS" describes $100 in Free Tier credits at Free Plan sign-up (plus more via activities), subject to current Free Tier terms and expiry; we have not verified current terms, and no account exists yet. The design is meant to stay within those credits with margin; the throttles, reserved concurrency and budget alert are the guard rails.
+* Credits: DP-Overview "FREE AWS CREDITS FOR NEW MEMBERS" describes Free Tier credits at Free Plan sign-up (plus more via activities), subject to current Free Tier terms and expiry; we have not verified current terms, and no account exists yet. The design is meant to stay within those credits with margin; the throttles, reserved concurrency and budget alert are the guard rails.
 * **Graviton:** the Lambda runs on arm64 and the wheel is aarch64, so the same code and pin are used on this Mac and in AWS. We do *not* claim the Best Use of COOL award: COOL (Cloud-Optimized OpenCV Library) is acquired through an AWS Marketplace listing, whose terms and pricing we have not reviewed, and the award requires measured COOL-vs-baseline evidence on Graviton (OCV "Focus Paths"). Optional stretch on Day 12 *only if* the listing is free and takes under an hour; otherwise skip.
 * Template draft: `INFRA/template.yaml` (passes `cfn-lint`; not deployed; `sam validate` and `sam build` not run).
 
