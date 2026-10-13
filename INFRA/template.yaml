@@ -79,7 +79,7 @@ Resources:
       DefaultRouteSettings: {ThrottlingBurstLimit: 10, ThrottlingRateLimit: 5}
       AccessLogSettings:
         DestinationArn: !GetAtt ApiAccessLogs.Arn
-        Format: '{"t":"$context.requestTime","ip":"$context.identity.sourceIp","route":"$context.routeKey","status":"$context.status","ms":"$context.responseLatency"}'
+        Format: '{"id":"$context.requestId","t":"$context.requestTime","ip":"$context.identity.sourceIp","route":"$context.routeKey","status":"$context.status","ms":"$context.responseLatency"}'
 
   ApiAccessLogs:
     Type: AWS::Logs::LogGroup
