@@ -33,7 +33,8 @@ echo "stack=$STACK_NAME region=$REGION log_retention=${LOG_RETENTION_DAYS}d aler
 say "1/7 artifact integrity"
 cd "$HERE"
 [ -f build/template.yaml ] || die "build/template.yaml missing - re-extract the tarball"
-sha256sum -c --quiet SHA256SUMS && echo "all checksums match"
+sha256sum -c --quiet SHA256SUMS || die "checksum mismatch: the tarball is damaged or edited; upload it again"
+echo "all checksums match"
 python3 - <<'PY'
 import struct, sys
 p = "build/DepsLayer/python/cv2/cv2.abi3.so"
@@ -62,6 +63,7 @@ echo "stack status: $STATUS"
 case "$STATUS" in
   ROLLBACK_COMPLETE|ROLLBACK_FAILED|DELETE_FAILED|CREATE_FAILED)
     die "stack is in $STATUS and cannot be updated. Delete it first:  sam delete --stack-name $STACK_NAME --region $REGION --no-prompts" ;;
+  REVIEW_IN_PROGRESS) echo "stack is waiting in REVIEW_IN_PROGRESS (an earlier first deploy stopped at its changeset); sam deploy continues from here" ;;
   *_IN_PROGRESS)
     die "a stack operation is still running ($STATUS); wait for it to finish and run again" ;;
 esac
@@ -72,6 +74,7 @@ esac
 say "4/7 concurrency cap"
 if [ -z "${RESERVED_CONCURRENCY:-}" ]; then
   TOTAL="$(aws lambda get-account-settings --query 'AccountLimit.ConcurrentExecutions' --output text)"
+  [[ "$TOTAL" =~ ^[0-9]+$ ]] || die "could not read the Lambda concurrency quota (got: $TOTAL); set RESERVED_CONCURRENCY=5 or 0 yourself"
   if [ "$TOTAL" -ge 15 ]; then RESERVED_CONCURRENCY=5; else RESERVED_CONCURRENCY=0; fi
   echo "account concurrency quota: $TOTAL -> reserved concurrency $RESERVED_CONCURRENCY"
   [ "$RESERVED_CONCURRENCY" -gt 0 ] || echo "WARNING: quota too small to reserve concurrency. Only the API Gateway throttle (5 req/s, burst 10) caps load until the quota is raised."
