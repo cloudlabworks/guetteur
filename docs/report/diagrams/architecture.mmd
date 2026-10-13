@@ -1,0 +1,25 @@
+flowchart LR
+  subgraph EDGE["EDGE - nothing pictorial leaves the site"]
+    direction TB
+    CAM["OAK-D PoE camera<br/>colour stays on the chip<br/>depth only to the host"]
+    PERC["OpenCV 5 perception<br/>evidence JSON, no pixels"]
+    PLAN["Planner<br/>rule-based now, LLM slot<br/>behind policy"]
+    EXEC["Executor<br/>autonomy tiers, evidence guardrails"]
+    GATE{{"Human gate<br/>silence = DENY"}}
+    CLM["Claim + receipt ledger"]
+    CAM --> PERC --> PLAN --> EXEC
+    EXEC -->|"recheck / pause / compensate"| PERC
+    EXEC -->|"request_approval"| GATE
+    EXEC --> CLM
+  end
+  subgraph AWS["AWS us-west-2 - serverless, arm64 Graviton"]
+    direction TB
+    JUDGE["Judge browser<br/>dashboard, tamper button"]
+    APIGW["API Gateway HTTP API<br/>HTTPS, 5 req/s, burst 10"]
+    LAM["Lambda arm64<br/>OpenCV 5 loop + receipt checks<br/>synthetic scenes, concurrency cap"]
+    CW["CloudWatch logs 7 days,<br/>alarms, budget alert"]
+    JUDGE --> APIGW --> LAM --> CW
+  end
+  VER["prove-it-done verifier<br/>vendored, re-runnable by anyone"]
+  VER -. "re-runs the checks" .-> CLM
+  EDGE -. "phase 2, not deployed" .-> AWS

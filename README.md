@@ -56,10 +56,11 @@ Re-verify any ledger yourself: `uv run guetteur verify-ledger runs/<run>/receipt
 | `src/guetteur/receipts.py`, `check_numpy.py`, `check_cv.py` | claims, ledger writer, the two independent re-checks |
 | `src/guetteur/synth.py` | synthetic depth scenes with ground truth (11 scenarios) |
 | `src/guetteur/cloud/` | the Lambda handler (also served locally), dashboard page, approval/evidence store |
-| `INFRA/` | AWS SAM template **draft** (not deployed) |
+| `INFRA/` | AWS SAM template (validated and built locally; not deployed) |
+| `deploy/` | credential-free CloudShell deploy kit: `cloudshell-deploy.sh`, `make-artifact.sh`, guardrail check |
 | `third_party/prove_it_done/` | vendored verifier (MIT), provenance in `PROVENANCE.md` |
 | `tests/` | unit, scenario, receipt/tamper, and API tests |
-| `docs/` | `RULES_NOTES.md`, `EVALUATION.md` (generated), `TRACE_EXAMPLE.md` |
+| `docs/` | `RULES_NOTES.md`, `EVALUATION.md` (generated), `TRACE_EXAMPLE.md`, `report/` (technical report draft, PDF) |
 
 ## Honest limits
 

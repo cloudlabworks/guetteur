@@ -1,0 +1,16 @@
+flowchart TD
+  F["depth frame t (uint16 mm)"] --> O["PERCEIVE (OpenCV 5)<br/>valid fraction, noise ratio, gain shift,<br/>blobs: contrast, depth change, size, flow, persistence"]
+  O --> S{"salient?<br/>attention gating"}
+  S -- no --> F2["next frame, planner not called"]
+  S -- yes --> P["DECIDE: planner -> action + rationale + cited numbers"]
+  P --> V{"policy: schema, bounds,<br/>budget, evidence preconditions"}
+  V -- rejected --> TR["trace: rejected_by_policy"]
+  V -- autonomous --> A1["ACT: recheck_zone(n, k) / pause_zone /<br/>degrade_zone / compensate_drift(gain)"]
+  V -- gated --> H{"ACT: request_approval -> human"}
+  A1 -->|"changes the NEXT OpenCV call"| O
+  H -- approve --> AL["alert published, baseline adopted"]
+  H -- "deny or timeout" --> NO["nothing published, cooldown"]
+  AL --> CL["claim + receipt ledger"]
+  NO --> CL
+  CL --> VF["PROVE IT DONE: sha256 of claim file +<br/>numpy re-check + OpenCV re-check"]
+  VF -->|"any FAIL: step stays open"| P
