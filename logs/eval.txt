@@ -1,0 +1,102 @@
+rule  empty                        s0 success=True  tp=0 fp=0 fn=0 claims=0
+rule  empty                        s1 success=True  tp=0 fp=0 fn=0 claims=0
+rule  empty                        s2 success=True  tp=0 fp=0 fn=0 claims=0
+rule  shelf_item_removed           s0 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  shelf_item_removed           s1 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  shelf_item_removed           s2 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  shelf_item_added             s0 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  shelf_item_added             s1 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  shelf_item_added             s2 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  subtle_item_removed          s0 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  subtle_item_removed          s1 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  subtle_item_removed          s2 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  person_walkthrough           s0 success=True  tp=0 fp=0 fn=0 claims=0
+rule  person_walkthrough           s1 success=True  tp=0 fp=0 fn=0 claims=0
+rule  person_walkthrough           s2 success=True  tp=0 fp=0 fn=0 claims=0
+rule  person_takes_item            s0 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  person_takes_item            s1 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  person_takes_item            s2 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  noise_burst                  s0 success=True  tp=0 fp=0 fn=0 claims=0
+rule  noise_burst                  s1 success=True  tp=0 fp=0 fn=0 claims=0
+rule  noise_burst                  s2 success=True  tp=0 fp=0 fn=0 claims=0
+rule  slow_drift                   s0 success=True  tp=0 fp=0 fn=0 claims=10 receipts_ok=True
+rule  slow_drift                   s1 success=True  tp=0 fp=0 fn=0 claims=10 receipts_ok=True
+rule  slow_drift                   s2 success=True  tp=0 fp=0 fn=0 claims=10 receipts_ok=True
+rule  lens_obstructed              s0 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  lens_obstructed              s1 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  lens_obstructed              s2 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  partial_washout              s0 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  partial_washout              s1 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  partial_washout              s2 success=True  tp=1 fp=0 fn=0 claims=1 receipts_ok=True
+rule  subthreshold_item_removed    s0 success=False tp=0 fp=0 fn=1 claims=0
+rule  subthreshold_item_removed    s1 success=False tp=0 fp=0 fn=1 claims=0
+rule  subthreshold_item_removed    s2 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded empty                        s0 success=True  tp=0 fp=0 fn=0 claims=0
+naive-guarded empty                        s1 success=True  tp=0 fp=0 fn=0 claims=0
+naive-guarded empty                        s2 success=True  tp=0 fp=0 fn=0 claims=0
+naive-guarded shelf_item_removed           s0 success=True  tp=1 fp=0 fn=0 claims=1
+naive-guarded shelf_item_removed           s1 success=True  tp=1 fp=0 fn=0 claims=1
+naive-guarded shelf_item_removed           s2 success=True  tp=1 fp=0 fn=0 claims=1
+naive-guarded shelf_item_added             s0 success=True  tp=1 fp=0 fn=0 claims=1
+naive-guarded shelf_item_added             s1 success=True  tp=1 fp=0 fn=0 claims=1
+naive-guarded shelf_item_added             s2 success=True  tp=1 fp=0 fn=0 claims=1
+naive-guarded subtle_item_removed          s0 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded subtle_item_removed          s1 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded subtle_item_removed          s2 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded person_walkthrough           s0 success=False tp=0 fp=0 fn=0 claims=0
+naive-guarded person_walkthrough           s1 success=False tp=0 fp=0 fn=0 claims=0
+naive-guarded person_walkthrough           s2 success=False tp=0 fp=0 fn=0 claims=0
+naive-guarded person_takes_item            s0 success=False tp=1 fp=0 fn=0 claims=1
+naive-guarded person_takes_item            s1 success=False tp=1 fp=0 fn=0 claims=1
+naive-guarded person_takes_item            s2 success=False tp=1 fp=0 fn=0 claims=1
+naive-guarded noise_burst                  s0 success=True  tp=0 fp=0 fn=0 claims=0
+naive-guarded noise_burst                  s1 success=True  tp=0 fp=0 fn=0 claims=0
+naive-guarded noise_burst                  s2 success=True  tp=0 fp=0 fn=0 claims=0
+naive-guarded slow_drift                   s0 success=False tp=0 fp=3 fn=0 claims=3
+naive-guarded slow_drift                   s1 success=False tp=0 fp=3 fn=0 claims=3
+naive-guarded slow_drift                   s2 success=False tp=0 fp=3 fn=0 claims=3
+naive-guarded lens_obstructed              s0 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded lens_obstructed              s1 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded lens_obstructed              s2 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded partial_washout              s0 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded partial_washout              s1 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded partial_washout              s2 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded subthreshold_item_removed    s0 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded subthreshold_item_removed    s1 success=False tp=0 fp=0 fn=1 claims=0
+naive-guarded subthreshold_item_removed    s2 success=False tp=0 fp=0 fn=1 claims=0
+naive empty                        s0 success=True  tp=0 fp=0 fn=0 claims=0
+naive empty                        s1 success=True  tp=0 fp=0 fn=0 claims=0
+naive empty                        s2 success=True  tp=0 fp=0 fn=0 claims=0
+naive shelf_item_removed           s0 success=True  tp=1 fp=0 fn=0 claims=1
+naive shelf_item_removed           s1 success=True  tp=1 fp=0 fn=0 claims=1
+naive shelf_item_removed           s2 success=True  tp=1 fp=0 fn=0 claims=1
+naive shelf_item_added             s0 success=True  tp=1 fp=0 fn=0 claims=1
+naive shelf_item_added             s1 success=True  tp=1 fp=0 fn=0 claims=1
+naive shelf_item_added             s2 success=True  tp=1 fp=0 fn=0 claims=1
+naive subtle_item_removed          s0 success=False tp=0 fp=0 fn=1 claims=0
+naive subtle_item_removed          s1 success=False tp=0 fp=0 fn=1 claims=0
+naive subtle_item_removed          s2 success=False tp=0 fp=0 fn=1 claims=0
+naive person_walkthrough           s0 success=False tp=0 fp=3 fn=0 claims=3
+naive person_walkthrough           s1 success=False tp=0 fp=3 fn=0 claims=3
+naive person_walkthrough           s2 success=False tp=0 fp=3 fn=0 claims=3
+naive person_takes_item            s0 success=False tp=1 fp=3 fn=0 claims=4
+naive person_takes_item            s1 success=False tp=1 fp=3 fn=0 claims=4
+naive person_takes_item            s2 success=False tp=1 fp=3 fn=0 claims=4
+naive noise_burst                  s0 success=True  tp=0 fp=0 fn=0 claims=0
+naive noise_burst                  s1 success=True  tp=0 fp=0 fn=0 claims=0
+naive noise_burst                  s2 success=True  tp=0 fp=0 fn=0 claims=0
+naive slow_drift                   s0 success=False tp=0 fp=3 fn=0 claims=3
+naive slow_drift                   s1 success=False tp=0 fp=3 fn=0 claims=3
+naive slow_drift                   s2 success=False tp=0 fp=3 fn=0 claims=3
+naive lens_obstructed              s0 success=False tp=0 fp=0 fn=1 claims=0
+naive lens_obstructed              s1 success=False tp=0 fp=0 fn=1 claims=0
+naive lens_obstructed              s2 success=False tp=0 fp=0 fn=1 claims=0
+naive partial_washout              s0 success=False tp=0 fp=0 fn=1 claims=0
+naive partial_washout              s1 success=False tp=0 fp=0 fn=1 claims=0
+naive partial_washout              s2 success=False tp=0 fp=0 fn=1 claims=0
+naive subthreshold_item_removed    s0 success=False tp=0 fp=0 fn=1 claims=0
+naive subthreshold_item_removed    s1 success=False tp=0 fp=0 fn=1 claims=0
+naive subthreshold_item_removed    s2 success=False tp=0 fp=0 fn=1 claims=0
+rule: success 30/33 precision 1.00 recall 0.86 (recall excl. known miss 1.00) tamper {'attempts': 24, 'rejected': 24} receipts {'ledgers': 21, 'all_proven': 21}
+naive-guarded: success 12/33 precision 0.50 recall 0.43 (recall excl. known miss 0.50) tamper None receipts None
+naive: success 12/33 precision 0.25 recall 0.43 (recall excl. known miss 0.50) tamper None receipts None

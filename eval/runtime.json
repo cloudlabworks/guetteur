@@ -1,0 +1,59 @@
+{
+  "env": {
+    "cpu": "Apple M4 Pro",
+    "machine": "arm64",
+    "system": "Darwin 25.6.0",
+    "python": "3.12.15",
+    "opencv": "5.0.0",
+    "opencv_pip_pin": "opencv-python-headless==5.0.0.93",
+    "numpy": "2.5.4",
+    "cv2_threads": 14,
+    "cv2_optimized": true,
+    "frame": "320x240 uint16 depth",
+    "cuda": "none (Apple Silicon, CPU only)"
+  },
+  "per_zone_frame_ms": {
+    "n": 2569,
+    "median": 4.671,
+    "p95": 6.668,
+    "p99": 7.866
+  },
+  "planner_call_ms": {
+    "n": 681,
+    "median": 0.009,
+    "p95": 0.0172
+  },
+  "loop_frame_ms_2_zones": {
+    "n": 1425,
+    "median": 8.598,
+    "p95": 11.644,
+    "p99": 12.386
+  },
+  "stages": {
+    "inpaint_TELEA_16U": {
+      "median_ms": 1.5002,
+      "p95_ms": 1.6497
+    },
+    "medianBlur_5_16U": {
+      "median_ms": 0.0672,
+      "p95_ms": 0.0759
+    },
+    "morphologyEx_open_3x3": {
+      "median_ms": 0.0073,
+      "p95_ms": 0.0075
+    },
+    "connectedComponentsWithStats": {
+      "median_ms": 0.1499,
+      "p95_ms": 0.2078
+    },
+    "calcOpticalFlowFarneback": {
+      "median_ms": 1.3188,
+      "p95_ms": 1.4329
+    },
+    "resize_INTER_AREA_6x8": {
+      "median_ms": 0.0042,
+      "p95_ms": 0.0043
+    }
+  },
+  "note": "analysis rate in the loop is 5 fps; the budget is 200 ms per frame"
+}

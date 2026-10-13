@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Team Drift - active perception with receipts</title>
+<style>
+:root{--bg:#0f1419;--fg:#e6edf3;--mut:#8b98a5;--card:#18202a;--ok:#3fb950;--bad:#f85149;--acc:#58a6ff;--warn:#d29922}
+@media(prefers-color-scheme:light){:root{--bg:#fff;--fg:#1f2328;--mut:#59636e;--card:#f6f8fa;--ok:#1a7f37;--bad:#cf222e;--acc:#0969da;--warn:#9a6700}}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif;max-width:1000px;margin:0 auto;padding:1rem}
+h1{font-size:1.4rem;margin:.2rem 0}.mut{color:var(--mut)}.card{background:var(--card);border-radius:8px;padding:.8rem 1rem;margin:.8rem 0}
+select,button{font:inherit;padding:.35rem .6rem;border-radius:6px;border:1px solid var(--mut);background:var(--bg);color:var(--fg)}
+button{cursor:pointer;background:var(--acc);color:#fff;border-color:var(--acc)} button.sec{background:var(--bg);color:var(--fg);border-color:var(--mut)}
+table{border-collapse:collapse;width:100%;font-size:13px}td,th{text-align:left;padding:.25rem .4rem;border-bottom:1px solid var(--mut)}
+.ok{color:var(--ok);font-weight:600}.bad{color:var(--bad);font-weight:600}.badge{border:1px solid var(--warn);color:var(--warn);border-radius:4px;padding:0 .35rem;font-size:12px}
+code{font-family:ui-monospace,monospace;font-size:12.5px}
+</style></head><body>
+<h1>Team Drift <span class="badge">SYNTHETIC depth scenes</span></h1>
+<p class="mut">OpenCV 5 turns depth frames into evidence; a planner chooses the next action; a human gate stops anything outward-facing; every claim carries a receipt you can re-run. No colour frames, no images, no camera needed on this page.</p>
+<div class="card">
+  <label>Scenario <select id="sc"></select></label>
+  <label>Planner <select id="pl"><option value="rule">rule (evidence-driven agent)</option><option value="naive-guarded">naive threshold + executor guardrails</option><option value="naive">naive threshold, no agent, no guardrails</option></select></label>
+  <label>Human gate <select id="gt"><option>approve</option><option>deny</option><option>timeout</option></select></label>
+  <label>Seed <select id="sd"><option>0</option><option>1</option><option>2</option></select></label>
+  <button id="go">Run the loop</button> <span id="st" class="mut"></span>
+  <p id="note" class="mut"></p>
+</div>
+<div id="out"></div>
+<script>
+const $=id=>document.getElementById(id), esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let last=null;
+fetch('/api/scenarios').then(r=>r.json()).then(l=>{$('sc').innerHTML=l.map(s=>`<option value="${esc(s.name)}" title="${esc(s.note)}">${esc(s.name)}</option>`).join('');
+  $('sc').onchange=()=>{const s=l.find(x=>x.name==$('sc').value);$('note').textContent=s?s.note:''};$('sc').onchange();});
+$('go').onclick=async()=>{
+  $('st').textContent='running OpenCV 5 loop...';
+  const r=await fetch('/api/run',{method:'POST',body:JSON.stringify({scenario:$('sc').value,planner:$('pl').value,gate:$('gt').value,seed:+$('sd').value})});
+  const d=await r.json(); $('st').textContent=''; if(!r.ok){$('out').innerHTML=`<div class="card bad">${esc(d.error)}</div>`;return;} last=d; render(d);};
+function render(d){
+  const s=d.score;
+  let h=`<div class="card"><b>${esc(d.scenario)}</b> (${esc(d.planner)}) &mdash; ground-truth check: <span class="${s.success?'ok':'bad'}">${s.success?'task success':'task FAILED'}</span>
+   &middot; true alerts ${s.tp}, false alerts ${s.fp}, missed ${s.fn}${s.known_miss?' <span class="badge">documented failure case</span>':''}
+   <br><span class="mut">planner called ${d.counters.planner_calls}x on ${d.counters.frames} frames; rechecks ${d.counters.rechecks}, pauses ${d.counters.pauses}, drift compensations ${d.counters.compensations}; server ${d.runtime_ms.server_total} ms, median loop ${d.runtime_ms.median_frame_loop} ms/frame</span></div>`;
+  h+=`<div class="card"><b>Decision trace</b> (steps where the planner acted)<table><tr><th>frame</th><th>zone</th><th>action</th><th>why (evidence cited)</th><th>outcome</th></tr>`+
+   d.trace.map(e=>`<tr><td>${e.frame}</td><td>${esc(e.zone)}</td><td><code>${esc(e.action.kind)} ${esc(JSON.stringify(e.action.args))}</code></td><td>${esc(e.action.rationale)}<br><span class="mut"><code>${esc(JSON.stringify(e.action.cited))}</code></span></td><td>${esc(e.outcome.status)}</td></tr>`).join('')+`</table></div>`;
+  h+=`<div class="card"><b>Alerts that left the system</b>: ${d.alerts.length?d.alerts.map(a=>`<div>frame ${a.frame}: ${esc(a.text)} <span class="mut">(approved by ${esc(a.approved_by)})</span></div>`).join(''):'<span class="mut">none (nothing approved)</span>'}</div>`;
+  h+=`<div class="card"><b>Receipts</b> &mdash; two independent re-checks per claim, re-run just now on the pinned input<table><tr><th>claim</th><th>numpy</th><th>OpenCV</th><th></th></tr>`+
+   d.claims.map((c,i)=>{const r=d.receipts[c.id];return `<tr><td>${esc(c.id)}: ${esc(c.text)}</td>
+   <td id="n${i}" class="${r['numpy-region-stats'].pass?'ok':'bad'}">${r['numpy-region-stats'].pass?'PASS':'FAIL'}<br><span class="mut">${esc(r['numpy-region-stats'].detail)}</span></td>
+   <td id="o${i}" class="${r['opencv-region-stats'].pass?'ok':'bad'}">${r['opencv-region-stats'].pass?'PASS':'FAIL'}<br><span class="mut">${esc(r['opencv-region-stats'].detail)}</span></td>
+   <td><button class="sec" onclick="tamper(${i})">Tamper: double the claim</button></td></tr>`}).join('')+`</table><p id="tm" class="mut"></p></div>`;
+  $('out').innerHTML=h;}
+async function tamper(i){
+  const c=JSON.parse(JSON.stringify(last.claims[i])), a=c.asserted;
+  if('dz_mm' in a)a.dz_mm*=2; else if('valid_frac' in a)a.valid_frac=Math.min(.95,a.valid_frac+.35); else a.gain+=.05;
+  const r=await (await fetch('/api/verify',{method:'POST',body:JSON.stringify({claim:c})})).json();
+  const n=r['numpy-region-stats'],o=r['opencv-region-stats'];
+  $('tm').innerHTML=`Tampered claim ${esc(c.id)}: numpy <span class="${n.pass?'ok':'bad'}">${n.pass?'PASS':'FAIL'}</span> (${esc(n.detail)}) &middot; OpenCV <span class="${o.pass?'ok':'bad'}">${o.pass?'PASS':'FAIL'}</span> (${esc(o.detail)}) &rarr; <b class="${r.proven?'bad':'ok'}">${r.proven?'NOT CAUGHT':'rejected'}</b>`;}
+</script></body></html>

@@ -1,0 +1,43 @@
+Team Drift demo. Input: SYNTHETIC OAK-D-style depth frames (240x320, uint16 mm). No colour, no images, no camera.
+
+======== 1. Ambiguous evidence changes the next tool call  (scenario: subtle_item_removed) ===
+A low item (25 mm relief) is taken at frame 95. In ONE frame it sits at only ~3.4 sigma: not enough to bother a human.
+  frame  97 shelf    recheck_zone      {"n": 7, "k": 2.0}        | contrast 3.3 is between 2.0 and 4.5: integrate 7 frames and look again
+  frame 104 shelf    request_approval  {"kind": "object_removed"}| clear change (+24 mm) held for 10 frames
+  -> the planner saw contrast between 'ignore' and 'confident', so it called recheck_zone(n frames); the OpenCV 5 re-run on the
+     integrated window decided whether a human is asked. Same scene, naive threshold-and-alert baseline:
+     naive baseline alerts: none (change missed)
+
+======== 2. Presence is not a change; a person takes an item  (scenario: person_takes_item) ===
+  frame  87 shelf    pause_zone        {"frames": 8}             | a person-sized, nearer-than-scene blob is present: do not judge scene changes while they are here
+  frame 160 shelf    request_approval  {"kind": "object_removed"}| clear change (+300 mm) held for 10 frames
+  -> zone paused while the person stands at the shelf; alert only after they left, with the item gone.
+
+======== 3. Human gate: no answer means no alert  (same scene, gate times out) ===
+  frame 104 shelf    request_approval  {"kind": "object_removed"}| clear change (+301 mm) held for 10 frames
+  frame 105 shelf    request_approval  {"kind": "object_removed"}| clear change (+299 mm) held for 11 frames
+  alerts published: none  (default on timeout is deny)
+
+======== 4. Sensor trouble is a different action, not a scene claim  (scenarios: noise_burst, slow_drift, lens_obstructed) ===
+  noise_burst      actions { degrade_zone: 2 } alerts none  success=True
+  slow_drift       actions { recheck_zone: 6, compensate_drift: 10 } alerts none  success=True
+  lens_obstructed  actions { request_approval: 3 } alerts ['sensor_fault']  success=True
+
+======== 5. Every claim carries a receipt: re-run by the prove-it-done verifier ===
+# Receipts: subtle_item_removed_s0_rule
+
+- [x] 1. c1: shelf: a 892 cm2 region became farther by 24 mm and stayed so for 10 frames (object removed)
+  - receipt: `file:runs/subtle_item_removed_s0_rule/claims/c1.json | sha256=e90d13da992a7d425f67285cfb980417aeb92dbea14103a2714ca8b07ab6517f` 
+  - receipt: `cmd:python -m guetteur.check_numpy runs/subtle_item_removed_s0_rule/claims/c1.json | contains=PASS | via=numpy-region-stats`
+  - receipt: `cmd:python -m guetteur.check_cv runs/subtle_item_removed_s0_rule/claims/c1.json | contains=PASS | via=opencv-region-stats`
+
+PASS  [1] file:runs/subtle_item_removed_s0_rule/claims/c1.json | sha256=e90d13da992a7d425f67285cfb980417aeb92dbea14103a2714ca8b07ab6517f -- sha256 matches (via filesystem)
+PASS  [2] cmd:python -m guetteur.check_numpy runs/subtle_item_removed_s0_rule/claims/c1.json | contains=PASS | via=numpy-region-stats -- exit 0, output contains the expected text (via numpy-region-stats)
+PASS  [3] cmd:python -m guetteur.check_cv runs/subtle_item_removed_s0_rule/claims/c1.json | contains=PASS | via=opencv-region-stats -- exit 0, output contains the expected text (via opencv-region-stats)
+  -> PROVEN: 3 receipt(s); behaviour checked through 3 instrument(s): filesystem, numpy-region-stats, opencv-region-stats
+summary: 3 pass, 0 fail; 1 of 1 done step(s) proven
+
+======== 6. A false claim cannot pass: inflate it, point it at the wrong pixels, re-point it at another recording ===
+  tamper=inflate      -> exit 1  summary: 1 pass, 2 fail; 0 of 1 done step(s) proven
+  tamper=wrong_place  -> exit 1  summary: 1 pass, 2 fail; 0 of 1 done step(s) proven
+  tamper=other_input  -> exit 1  summary: 1 pass, 2 fail; 0 of 1 done step(s) proven

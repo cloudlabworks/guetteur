@@ -1,0 +1,39 @@
+{
+  "env": {
+    "cpu": "Apple M4 Pro",
+    "machine": "arm64",
+    "system": "Darwin 25.6.0",
+    "python": "3.12.15",
+    "opencv": "5.0.0",
+    "opencv_pip_pin": "opencv-python-headless==5.0.0.93",
+    "numpy": "2.5.4",
+    "cv2_threads": 14,
+    "cv2_optimized": true,
+    "frame": "320x240 uint16 depth",
+    "cuda": "none (Apple Silicon, CPU only)"
+  },
+  "per_zone_frame_ms": {
+    "n": 2569,
+    "median": 4.671,
+    "p95": 6.668,
+    "p99": 7.866
+  },
+  "planner_call_ms": {
+    "n": 681,
+    "median": 0.009,
+    "p95": 0.0172
+  },
+  "loop_frame_ms_2_zones": {
+    "n": 1425,
+    "median": 8.598,
+    "p95": 11.644,
+    "p99": 12.386
+  },
+  "note": "analysis rate in the loop is 5 fps; the budget is 200 ms per frame"
+}
+  inpaint_TELEA_16U                median 1.500 ms  p95 1.650 ms
+  medianBlur_5_16U                 median 0.067 ms  p95 0.076 ms
+  morphologyEx_open_3x3            median 0.007 ms  p95 0.007 ms
+  connectedComponentsWithStats     median 0.150 ms  p95 0.208 ms
+  calcOpticalFlowFarneback         median 1.319 ms  p95 1.433 ms
+  resize_INTER_AREA_6x8            median 0.004 ms  p95 0.004 ms

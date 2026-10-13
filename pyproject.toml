@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "guetteur"
+version = "0.1.0"
+description = "Team Drift: a privacy-first active-perception agent. OpenCV 5 depth analysis -> planner -> actions, every claim backed by a re-runnable receipt."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+license-files = ["LICENSE"]
+# opencv-python-headless (not opencv-python): no GUI deps, and a manylinux aarch64 wheel
+# exists for 5.0.0.93, so the same pin runs on Apple Silicon and on AWS Lambda arm64 (Graviton).
+dependencies = [
+  "opencv-python-headless==5.0.0.93",
+  "numpy==2.5.4",
+]
+
+[dependency-groups]
+dev = ["pytest==9.1.1"]
+
+[project.scripts]
+guetteur = "guetteur.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/guetteur"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

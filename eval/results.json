@@ -1,0 +1,3815 @@
+{
+  "env": {
+    "cpu": "Apple M4 Pro",
+    "machine": "arm64",
+    "system": "Darwin 25.6.0",
+    "python": "3.12.15",
+    "opencv": "5.0.0",
+    "opencv_pip_pin": "opencv-python-headless==5.0.0.93",
+    "numpy": "2.5.4",
+    "cv2_threads": 14,
+    "cv2_optimized": true,
+    "frame": "320x240 uint16 depth",
+    "cuda": "none (Apple Silicon, CPU only)"
+  },
+  "seeds": 3,
+  "planners": {
+    "rule": {
+      "runs": 33,
+      "scenario_success": 30,
+      "scenario_success_excl_known_miss": 30,
+      "n_excl_known_miss": 30,
+      "tp": 18,
+      "fp": 0,
+      "fn": 3,
+      "fn_known_miss": 3,
+      "precision": 1.0,
+      "recall": 0.8571428571428571,
+      "recall_excl_known_miss": 1.0,
+      "median_latency_frames": 9.0,
+      "latency_s_at_fps": 1.8,
+      "receipts_verified": {
+        "ledgers": 21,
+        "all_proven": 21
+      },
+      "tamper_rejected": {
+        "attempts": 24,
+        "rejected": 24
+      },
+      "planner_calls": 1693,
+      "frames": 4605,
+      "planner_call_rate": 0.36764386536373506,
+      "rows": [
+        {
+          "scenario": "empty",
+          "seed": 0,
+          "run": "empty_s0_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 2,
+            "skipped_not_salient": 248,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "empty",
+          "seed": 1,
+          "run": "empty_s1_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 3,
+            "skipped_not_salient": 247,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "empty",
+          "seed": 2,
+          "run": "empty_s2_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 4,
+            "skipped_not_salient": 246,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "shelf_item_removed",
+          "seed": 0,
+          "run": "shelf_item_removed_s0_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          },
+          "tamper": {
+            "inflate": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "wrong_place": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "other_input": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ]
+          }
+        },
+        {
+          "scenario": "shelf_item_removed",
+          "seed": 1,
+          "run": "shelf_item_removed_s1_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "shelf_item_removed",
+          "seed": 2,
+          "run": "shelf_item_removed_s2_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 12,
+            "skipped_not_salient": 238,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "shelf_item_added",
+          "seed": 0,
+          "run": "shelf_item_added_s0_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_added",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          },
+          "tamper": {
+            "inflate": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "wrong_place": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "other_input": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ]
+          }
+        },
+        {
+          "scenario": "shelf_item_added",
+          "seed": 1,
+          "run": "shelf_item_added_s1_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_added",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "shelf_item_added",
+          "seed": 2,
+          "run": "shelf_item_added_s2_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 12,
+            "skipped_not_salient": 238,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_added",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "subtle_item_removed",
+          "seed": 0,
+          "run": "subtle_item_removed_s0_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 145,
+            "planner_calls": 5,
+            "skipped_not_salient": 279,
+            "skipped_paused": 0,
+            "rechecks": 1,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          },
+          "tamper": {
+            "inflate": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "wrong_place": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "other_input": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ]
+          }
+        },
+        {
+          "scenario": "subtle_item_removed",
+          "seed": 1,
+          "run": "subtle_item_removed_s1_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 145,
+            "planner_calls": 6,
+            "skipped_not_salient": 278,
+            "skipped_paused": 0,
+            "rechecks": 1,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "subtle_item_removed",
+          "seed": 2,
+          "run": "subtle_item_removed_s2_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 145,
+            "planner_calls": 6,
+            "skipped_not_salient": 278,
+            "skipped_paused": 0,
+            "rechecks": 1,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "person_walkthrough",
+          "seed": 0,
+          "run": "person_walkthrough_s0_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 8,
+            "skipped_not_salient": 214,
+            "skipped_paused": 28,
+            "rechecks": 0,
+            "pauses": 4,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "person_walkthrough",
+          "seed": 1,
+          "run": "person_walkthrough_s1_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 9,
+            "skipped_not_salient": 213,
+            "skipped_paused": 28,
+            "rechecks": 0,
+            "pauses": 4,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "person_walkthrough",
+          "seed": 2,
+          "run": "person_walkthrough_s2_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 211,
+            "skipped_paused": 28,
+            "rechecks": 0,
+            "pauses": 4,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "person_takes_item",
+          "seed": 0,
+          "run": "person_takes_item_s0_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            55
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 22,
+            "skipped_not_salient": 272,
+            "skipped_paused": 56,
+            "rechecks": 0,
+            "pauses": 8,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              160,
+              "object_removed",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          },
+          "tamper": {
+            "inflate": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "wrong_place": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "other_input": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ]
+          }
+        },
+        {
+          "scenario": "person_takes_item",
+          "seed": 1,
+          "run": "person_takes_item_s1_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            55
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 22,
+            "skipped_not_salient": 272,
+            "skipped_paused": 56,
+            "rechecks": 0,
+            "pauses": 8,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              160,
+              "object_removed",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "person_takes_item",
+          "seed": 2,
+          "run": "person_takes_item_s2_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            55
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 23,
+            "skipped_not_salient": 271,
+            "skipped_paused": 56,
+            "rechecks": 0,
+            "pauses": 8,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              160,
+              "object_removed",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "noise_burst",
+          "seed": 0,
+          "run": "noise_burst_s0_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 17,
+            "skipped_not_salient": 233,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 2,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "noise_burst",
+          "seed": 1,
+          "run": "noise_burst_s1_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 19,
+            "skipped_not_salient": 231,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 2,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "noise_burst",
+          "seed": 2,
+          "run": "noise_burst_s2_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 20,
+            "skipped_not_salient": 230,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 2,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "slow_drift",
+          "seed": 0,
+          "run": "slow_drift_s0_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 193,
+            "skipped_not_salient": 121,
+            "skipped_paused": 0,
+            "rechecks": 6,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 10,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 10,
+          "alerts": [],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 30 pass, 0 fail; 10 of 10 done step(s) proven"
+          },
+          "tamper": {
+            "inflate": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              },
+              {
+                "claim": "c2",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "wrong_place": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              },
+              {
+                "claim": "c2",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "other_input": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              },
+              {
+                "claim": "c2",
+                "rejected": true,
+                "exit": 1
+              }
+            ]
+          }
+        },
+        {
+          "scenario": "slow_drift",
+          "seed": 1,
+          "run": "slow_drift_s1_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 192,
+            "skipped_not_salient": 119,
+            "skipped_paused": 0,
+            "rechecks": 7,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 10,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 10,
+          "alerts": [],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 30 pass, 0 fail; 10 of 10 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "slow_drift",
+          "seed": 2,
+          "run": "slow_drift_s2_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 195,
+            "skipped_not_salient": 117,
+            "skipped_paused": 0,
+            "rechecks": 7,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 10,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 10,
+          "alerts": [],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 30 pass, 0 fail; 10 of 10 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "lens_obstructed",
+          "seed": 0,
+          "run": "lens_obstructed_s0_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            2
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 161,
+            "skipped_not_salient": 89,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 155
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              107,
+              "sensor_fault",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          },
+          "tamper": {
+            "inflate": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "wrong_place": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "other_input": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ]
+          }
+        },
+        {
+          "scenario": "lens_obstructed",
+          "seed": 1,
+          "run": "lens_obstructed_s1_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            2
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 160,
+            "skipped_not_salient": 90,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 155
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              107,
+              "sensor_fault",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "lens_obstructed",
+          "seed": 2,
+          "run": "lens_obstructed_s2_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            2
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 162,
+            "skipped_not_salient": 88,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 155
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              107,
+              "sensor_fault",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "partial_washout",
+          "seed": 0,
+          "run": "partial_washout_s0_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            29
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 165,
+            "planner_calls": 121,
+            "skipped_not_salient": 209,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 2,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 90
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              134,
+              "sensor_degraded",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          },
+          "tamper": {
+            "inflate": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "wrong_place": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ],
+            "other_input": [
+              {
+                "claim": "c1",
+                "rejected": true,
+                "exit": 1
+              }
+            ]
+          }
+        },
+        {
+          "scenario": "partial_washout",
+          "seed": 1,
+          "run": "partial_washout_s1_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            29
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 165,
+            "planner_calls": 121,
+            "skipped_not_salient": 209,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 2,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 90
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              134,
+              "sensor_degraded",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "partial_washout",
+          "seed": 2,
+          "run": "partial_washout_s2_rule",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            29
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 165,
+            "planner_calls": 124,
+            "skipped_not_salient": 206,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 2,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 90
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              134,
+              "sensor_degraded",
+              "shelf"
+            ]
+          ],
+          "receipts": {
+            "ok": true,
+            "summary": "summary: 3 pass, 0 fail; 1 of 1 done step(s) proven"
+          }
+        },
+        {
+          "scenario": "subthreshold_item_removed",
+          "seed": 0,
+          "run": "subthreshold_item_removed_s0_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": true,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 6,
+            "skipped_not_salient": 244,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subthreshold_item_removed",
+          "seed": 1,
+          "run": "subthreshold_item_removed_s1_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": true,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 6,
+            "skipped_not_salient": 244,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subthreshold_item_removed",
+          "seed": 2,
+          "run": "subthreshold_item_removed_s2_rule",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": true,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 7,
+            "skipped_not_salient": 243,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        }
+      ],
+      "runtime_ms": {
+        "perception_per_zone_frame": {
+          "n": 8827,
+          "median": 4.9776670057326555,
+          "p95": 6.848920928314327,
+          "p99": 11.566408057697112
+        },
+        "planner_per_call": {
+          "n": 1693,
+          "median": 0.00758306123316288,
+          "p95": 0.018508499488234503
+        },
+        "loop_per_frame_all_zones": {
+          "n": 4605,
+          "median": 10.113542200997472,
+          "p95": 12.992092221975332,
+          "p99": 23.551271948963404
+        }
+      }
+    },
+    "naive-guarded": {
+      "runs": 33,
+      "scenario_success": 12,
+      "scenario_success_excl_known_miss": 12,
+      "n_excl_known_miss": 30,
+      "tp": 9,
+      "fp": 9,
+      "fn": 12,
+      "fn_known_miss": 3,
+      "precision": 0.5,
+      "recall": 0.42857142857142855,
+      "recall_excl_known_miss": 0.5,
+      "median_latency_frames": 18.0,
+      "latency_s_at_fps": 3.6,
+      "receipts_verified": null,
+      "tamper_rejected": null,
+      "planner_calls": 2588,
+      "frames": 4605,
+      "planner_call_rate": 0.5619978284473398,
+      "rows": [
+        {
+          "scenario": "empty",
+          "seed": 0,
+          "run": "empty_s0_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 2,
+            "skipped_not_salient": 248,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "empty",
+          "seed": 1,
+          "run": "empty_s1_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 3,
+            "skipped_not_salient": 247,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "empty",
+          "seed": 2,
+          "run": "empty_s2_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 4,
+            "skipped_not_salient": 246,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "shelf_item_removed",
+          "seed": 0,
+          "run": "shelf_item_removed_s0_naive-guarded",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_removed",
+          "seed": 1,
+          "run": "shelf_item_removed_s1_naive-guarded",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_removed",
+          "seed": 2,
+          "run": "shelf_item_removed_s2_naive-guarded",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            18
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 21,
+            "skipped_not_salient": 229,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 1
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              113,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_added",
+          "seed": 0,
+          "run": "shelf_item_added_s0_naive-guarded",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_added",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_added",
+          "seed": 1,
+          "run": "shelf_item_added_s1_naive-guarded",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_added",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_added",
+          "seed": 2,
+          "run": "shelf_item_added_s2_naive-guarded",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            18
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 21,
+            "skipped_not_salient": 229,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 1
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              113,
+              "object_added",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "subtle_item_removed",
+          "seed": 0,
+          "run": "subtle_item_removed_s0_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_rechecks"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 145,
+            "planner_calls": 111,
+            "skipped_not_salient": 179,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subtle_item_removed",
+          "seed": 1,
+          "run": "subtle_item_removed_s1_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_rechecks"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 145,
+            "planner_calls": 112,
+            "skipped_not_salient": 178,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subtle_item_removed",
+          "seed": 2,
+          "run": "subtle_item_removed_s2_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_rechecks"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 145,
+            "planner_calls": 112,
+            "skipped_not_salient": 178,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "person_walkthrough",
+          "seed": 0,
+          "run": "person_walkthrough_s0_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 32,
+            "skipped_not_salient": 218,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 2
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "person_walkthrough",
+          "seed": 1,
+          "run": "person_walkthrough_s1_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 34,
+            "skipped_not_salient": 216,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 2
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "person_walkthrough",
+          "seed": 2,
+          "run": "person_walkthrough_s2_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 35,
+            "skipped_not_salient": 215,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 2
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "person_takes_item",
+          "seed": 0,
+          "run": "person_takes_item_s0_naive-guarded",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            59
+          ],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 82,
+            "skipped_not_salient": 268,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 7
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              164,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "person_takes_item",
+          "seed": 1,
+          "run": "person_takes_item_s1_naive-guarded",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            59
+          ],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 82,
+            "skipped_not_salient": 268,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 7
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              164,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "person_takes_item",
+          "seed": 2,
+          "run": "person_takes_item_s2_naive-guarded",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            58
+          ],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 82,
+            "skipped_not_salient": 268,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 7
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              163,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "noise_burst",
+          "seed": 0,
+          "run": "noise_burst_s0_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 13,
+            "skipped_not_salient": 237,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "noise_burst",
+          "seed": 1,
+          "run": "noise_burst_s1_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 15,
+            "skipped_not_salient": 235,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "noise_burst",
+          "seed": 2,
+          "run": "noise_burst_s2_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 16,
+            "skipped_not_salient": 234,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "slow_drift",
+          "seed": 0,
+          "run": "slow_drift_s0_naive-guarded",
+          "tp": 0,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_compensations"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 298,
+            "skipped_not_salient": 52,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 3,
+            "approved": 3,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 3,
+          "alerts": [
+            [
+              120,
+              "object_removed",
+              "shelf"
+            ],
+            [
+              166,
+              "object_removed",
+              "doorway"
+            ],
+            [
+              212,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "slow_drift",
+          "seed": 1,
+          "run": "slow_drift_s1_naive-guarded",
+          "tp": 0,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_compensations"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 298,
+            "skipped_not_salient": 52,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 3,
+            "approved": 3,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 3,
+          "alerts": [
+            [
+              119,
+              "object_removed",
+              "shelf"
+            ],
+            [
+              163,
+              "object_removed",
+              "doorway"
+            ],
+            [
+              211,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "slow_drift",
+          "seed": 2,
+          "run": "slow_drift_s2_naive-guarded",
+          "tp": 0,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_compensations"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 303,
+            "skipped_not_salient": 47,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 3,
+            "approved": 3,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 3,
+          "alerts": [
+            [
+              120,
+              "object_removed",
+              "shelf"
+            ],
+            [
+              164,
+              "object_removed",
+              "doorway"
+            ],
+            [
+              213,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "lens_obstructed",
+          "seed": 0,
+          "run": "lens_obstructed_s0_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 161,
+            "skipped_not_salient": 89,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "lens_obstructed",
+          "seed": 1,
+          "run": "lens_obstructed_s1_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 160,
+            "skipped_not_salient": 90,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "lens_obstructed",
+          "seed": 2,
+          "run": "lens_obstructed_s2_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 162,
+            "skipped_not_salient": 88,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "partial_washout",
+          "seed": 0,
+          "run": "partial_washout_s0_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 165,
+            "planner_calls": 121,
+            "skipped_not_salient": 209,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "partial_washout",
+          "seed": 1,
+          "run": "partial_washout_s1_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 165,
+            "planner_calls": 121,
+            "skipped_not_salient": 209,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "partial_washout",
+          "seed": 2,
+          "run": "partial_washout_s2_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 165,
+            "planner_calls": 124,
+            "skipped_not_salient": 206,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subthreshold_item_removed",
+          "seed": 0,
+          "run": "subthreshold_item_removed_s0_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": true,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 6,
+            "skipped_not_salient": 244,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subthreshold_item_removed",
+          "seed": 1,
+          "run": "subthreshold_item_removed_s1_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": true,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 6,
+            "skipped_not_salient": 244,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subthreshold_item_removed",
+          "seed": 2,
+          "run": "subthreshold_item_removed_s2_naive-guarded",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": true,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 7,
+            "skipped_not_salient": 243,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        }
+      ],
+      "runtime_ms": {
+        "perception_per_zone_frame": {
+          "n": 9210,
+          "median": 4.569958429783583,
+          "p95": 5.754956370219587,
+          "p99": 6.958160141948608
+        },
+        "planner_per_call": {
+          "n": 2588,
+          "median": 0.004332978278398514,
+          "p95": 0.0077500008046627045
+        },
+        "loop_per_frame_all_zones": {
+          "n": 4605,
+          "median": 8.960374863818288,
+          "p95": 11.064449651166798,
+          "p99": 12.222473649308085
+        }
+      }
+    },
+    "naive": {
+      "runs": 33,
+      "scenario_success": 12,
+      "scenario_success_excl_known_miss": 12,
+      "n_excl_known_miss": 30,
+      "tp": 9,
+      "fp": 27,
+      "fn": 12,
+      "fn_known_miss": 3,
+      "precision": 0.25,
+      "recall": 0.42857142857142855,
+      "recall_excl_known_miss": 0.5,
+      "median_latency_frames": 9.0,
+      "latency_s_at_fps": 1.8,
+      "receipts_verified": null,
+      "tamper_rejected": null,
+      "planner_calls": 2720,
+      "frames": 4605,
+      "planner_call_rate": 0.5906623235613464,
+      "rows": [
+        {
+          "scenario": "empty",
+          "seed": 0,
+          "run": "empty_s0_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 2,
+            "skipped_not_salient": 248,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "empty",
+          "seed": 1,
+          "run": "empty_s1_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 3,
+            "skipped_not_salient": 247,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "empty",
+          "seed": 2,
+          "run": "empty_s2_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 4,
+            "skipped_not_salient": 246,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "shelf_item_removed",
+          "seed": 0,
+          "run": "shelf_item_removed_s0_naive",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_removed",
+          "seed": 1,
+          "run": "shelf_item_removed_s1_naive",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_removed",
+          "seed": 2,
+          "run": "shelf_item_removed_s2_naive",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            8
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              103,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_added",
+          "seed": 0,
+          "run": "shelf_item_added_s0_naive",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_added",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_added",
+          "seed": 1,
+          "run": "shelf_item_added_s1_naive",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            9
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              104,
+              "object_added",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "shelf_item_added",
+          "seed": 2,
+          "run": "shelf_item_added_s2_naive",
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [
+            8
+          ],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 11,
+            "skipped_not_salient": 239,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 1,
+            "approved": 1,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 1,
+          "alerts": [
+            [
+              103,
+              "object_added",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "subtle_item_removed",
+          "seed": 0,
+          "run": "subtle_item_removed_s0_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_rechecks"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 145,
+            "planner_calls": 111,
+            "skipped_not_salient": 179,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subtle_item_removed",
+          "seed": 1,
+          "run": "subtle_item_removed_s1_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_rechecks"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 145,
+            "planner_calls": 112,
+            "skipped_not_salient": 178,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subtle_item_removed",
+          "seed": 2,
+          "run": "subtle_item_removed_s2_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_rechecks"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 145,
+            "planner_calls": 112,
+            "skipped_not_salient": 178,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "person_walkthrough",
+          "seed": 0,
+          "run": "person_walkthrough_s0_naive",
+          "tp": 0,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 63,
+            "skipped_not_salient": 187,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 3,
+            "approved": 3,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 3
+          },
+          "n_claims": 3,
+          "alerts": [
+            [
+              94,
+              "object_added",
+              "doorway"
+            ],
+            [
+              104,
+              "object_removed",
+              "doorway"
+            ],
+            [
+              144,
+              "object_removed",
+              "doorway"
+            ]
+          ]
+        },
+        {
+          "scenario": "person_walkthrough",
+          "seed": 1,
+          "run": "person_walkthrough_s1_naive",
+          "tp": 0,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 64,
+            "skipped_not_salient": 186,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 3,
+            "approved": 3,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 3
+          },
+          "n_claims": 3,
+          "alerts": [
+            [
+              94,
+              "object_added",
+              "doorway"
+            ],
+            [
+              104,
+              "object_removed",
+              "doorway"
+            ],
+            [
+              144,
+              "object_removed",
+              "doorway"
+            ]
+          ]
+        },
+        {
+          "scenario": "person_walkthrough",
+          "seed": 2,
+          "run": "person_walkthrough_s2_naive",
+          "tp": 0,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 66,
+            "skipped_not_salient": 184,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 3,
+            "approved": 3,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 3
+          },
+          "n_claims": 3,
+          "alerts": [
+            [
+              94,
+              "object_added",
+              "doorway"
+            ],
+            [
+              104,
+              "object_removed",
+              "doorway"
+            ],
+            [
+              144,
+              "object_removed",
+              "doorway"
+            ]
+          ]
+        },
+        {
+          "scenario": "person_takes_item",
+          "seed": 0,
+          "run": "person_takes_item_s0_naive",
+          "tp": 1,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [
+            40
+          ],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 102,
+            "skipped_not_salient": 248,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 4,
+            "approved": 4,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 6
+          },
+          "n_claims": 4,
+          "alerts": [
+            [
+              94,
+              "object_added",
+              "shelf"
+            ],
+            [
+              134,
+              "object_added",
+              "shelf"
+            ],
+            [
+              145,
+              "object_removed",
+              "shelf"
+            ],
+            [
+              185,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "person_takes_item",
+          "seed": 1,
+          "run": "person_takes_item_s1_naive",
+          "tp": 1,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [
+            40
+          ],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 102,
+            "skipped_not_salient": 248,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 4,
+            "approved": 4,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 6
+          },
+          "n_claims": 4,
+          "alerts": [
+            [
+              94,
+              "object_added",
+              "shelf"
+            ],
+            [
+              134,
+              "object_added",
+              "shelf"
+            ],
+            [
+              145,
+              "object_removed",
+              "shelf"
+            ],
+            [
+              185,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "person_takes_item",
+          "seed": 2,
+          "run": "person_takes_item_s2_naive",
+          "tp": 1,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [
+            38
+          ],
+          "behaviours_missing": [
+            "min_pauses"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 102,
+            "skipped_not_salient": 248,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 4,
+            "approved": 4,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0,
+            "suppressed": 6
+          },
+          "n_claims": 4,
+          "alerts": [
+            [
+              93,
+              "object_added",
+              "shelf"
+            ],
+            [
+              133,
+              "object_added",
+              "shelf"
+            ],
+            [
+              143,
+              "object_removed",
+              "shelf"
+            ],
+            [
+              183,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "noise_burst",
+          "seed": 0,
+          "run": "noise_burst_s0_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 13,
+            "skipped_not_salient": 237,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "noise_burst",
+          "seed": 1,
+          "run": "noise_burst_s1_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 15,
+            "skipped_not_salient": 235,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "noise_burst",
+          "seed": 2,
+          "run": "noise_burst_s2_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": true,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 16,
+            "skipped_not_salient": 234,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "slow_drift",
+          "seed": 0,
+          "run": "slow_drift_s0_naive",
+          "tp": 0,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_compensations"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 298,
+            "skipped_not_salient": 52,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 3,
+            "approved": 3,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 3,
+          "alerts": [
+            [
+              120,
+              "object_removed",
+              "shelf"
+            ],
+            [
+              166,
+              "object_removed",
+              "doorway"
+            ],
+            [
+              212,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "slow_drift",
+          "seed": 1,
+          "run": "slow_drift_s1_naive",
+          "tp": 0,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_compensations"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 298,
+            "skipped_not_salient": 52,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 3,
+            "approved": 3,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 3,
+          "alerts": [
+            [
+              119,
+              "object_removed",
+              "shelf"
+            ],
+            [
+              163,
+              "object_removed",
+              "doorway"
+            ],
+            [
+              211,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "slow_drift",
+          "seed": 2,
+          "run": "slow_drift_s2_naive",
+          "tp": 0,
+          "fp": 3,
+          "fn": 0,
+          "latency_frames": [],
+          "behaviours_missing": [
+            "min_compensations"
+          ],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 175,
+            "planner_calls": 303,
+            "skipped_not_salient": 47,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 3,
+            "approved": 3,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 3,
+          "alerts": [
+            [
+              120,
+              "object_removed",
+              "shelf"
+            ],
+            [
+              164,
+              "object_removed",
+              "doorway"
+            ],
+            [
+              213,
+              "object_removed",
+              "shelf"
+            ]
+          ]
+        },
+        {
+          "scenario": "lens_obstructed",
+          "seed": 0,
+          "run": "lens_obstructed_s0_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 161,
+            "skipped_not_salient": 89,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "lens_obstructed",
+          "seed": 1,
+          "run": "lens_obstructed_s1_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 160,
+            "skipped_not_salient": 90,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "lens_obstructed",
+          "seed": 2,
+          "run": "lens_obstructed_s2_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 162,
+            "skipped_not_salient": 88,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "partial_washout",
+          "seed": 0,
+          "run": "partial_washout_s0_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 165,
+            "planner_calls": 121,
+            "skipped_not_salient": 209,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "partial_washout",
+          "seed": 1,
+          "run": "partial_washout_s1_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 165,
+            "planner_calls": 121,
+            "skipped_not_salient": 209,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "partial_washout",
+          "seed": 2,
+          "run": "partial_washout_s2_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": false,
+          "counters": {
+            "frames": 165,
+            "planner_calls": 124,
+            "skipped_not_salient": 206,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subthreshold_item_removed",
+          "seed": 0,
+          "run": "subthreshold_item_removed_s0_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": true,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 6,
+            "skipped_not_salient": 244,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subthreshold_item_removed",
+          "seed": 1,
+          "run": "subthreshold_item_removed_s1_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": true,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 6,
+            "skipped_not_salient": 244,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        },
+        {
+          "scenario": "subthreshold_item_removed",
+          "seed": 2,
+          "run": "subthreshold_item_removed_s2_naive",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "latency_frames": [],
+          "behaviours_missing": [],
+          "success": false,
+          "known_miss": true,
+          "counters": {
+            "frames": 125,
+            "planner_calls": 7,
+            "skipped_not_salient": 243,
+            "skipped_paused": 0,
+            "rechecks": 0,
+            "pauses": 0,
+            "degrades": 0,
+            "compensations": 0,
+            "requests": 0,
+            "approved": 0,
+            "denied": 0,
+            "timeouts": 0,
+            "policy_rejections": 0
+          },
+          "n_claims": 0,
+          "alerts": []
+        }
+      ],
+      "runtime_ms": {
+        "perception_per_zone_frame": {
+          "n": 9210,
+          "median": 4.535186919383705,
+          "p95": 5.727495637256651,
+          "p99": 7.109462576918304
+        },
+        "planner_per_call": {
+          "n": 2720,
+          "median": 0.004166504368185997,
+          "p95": 0.007458031177520752
+        },
+        "loop_per_frame_all_zones": {
+          "n": 4605,
+          "median": 8.8447080925107,
+          "p95": 11.072358395904303,
+          "p99": 12.546076597645879
+        }
+      }
+    }
+  }
+}

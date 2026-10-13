@@ -1,0 +1,185 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Guetteur by Team Drift (OpenCV AI Competition 2026) - DRAFT, NOT DEPLOYED.
+  Judge-facing endpoint + OpenCV 5 receipt/perception functions on Lambda arm64 (Graviton),
+  DynamoDB approvals/evidence (TTL), S3 for opt-in evidence snippets, CloudWatch alarms and a budget guard.
+  Every resource is pay-per-use or free-tier eligible; nothing here runs idle.
+
+Parameters:
+  AlertEmail:
+    Type: String
+    Default: ""
+    Description: Where budget/error alarms are mailed (leave empty to skip). Needs the owner to confirm the SNS subscription.
+  MonthlyBudgetUsd:
+    Type: Number
+    Default: 20
+    Description: Budget guard for the stack. Alerts at 50% and 80% of actual spend. Choose a figure the account owner is comfortable with.
+  EdgeApiKeyValue:
+    Type: String
+    NoEcho: true
+    MinLength: 20
+    Description: Shared secret the edge agent sends as x-edge-key on /api/evidence. Public judge routes do not need it.
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Architectures: [arm64]          # Graviton. opencv-python-headless 5.0.0.93 ships a manylinux aarch64 wheel.
+    Timeout: 25                     # API Gateway HTTP API hard limit is 30 s
+    MemorySize: 1024
+    Tracing: Active
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref StateTable
+        POWERTOOLS_SERVICE_NAME: guetteur
+        LOG_LEVEL: INFO
+
+Resources:
+  # ---- OpenCV 5 + numpy as a layer, built for arm64 -------------------------------------------------
+  DepsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: python3.12
+      BuildArchitecture: arm64
+    Properties:
+      LayerName: guetteur-deps
+      Description: opencv-python-headless==5.0.0.93, numpy==2.5.4 (arm64)
+      ContentUri: layer/                  # layer/requirements.txt pins the two wheels; see INFRA/README.md
+      CompatibleRuntimes: [python3.12]
+      CompatibleArchitectures: [arm64]
+
+  # ---- The judge-facing API: dashboard, run, verify -------------------------------------------------
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: guetteur-api
+      Description: Dashboard + /api/run + /api/verify (synthetic scenes only; OpenCV 5 runs here)
+      Handler: guetteur.cloud.handler.lambda_handler
+      CodeUri: ../src/
+      Layers: [!Ref DepsLayer]
+      ReservedConcurrentExecutions: 5     # hard ceiling on cost and abuse
+      Policies:
+        - DynamoDBCrudPolicy: {TableName: !Ref StateTable}
+      Events:
+        Root: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Path: /, Method: GET}}
+        Health: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Path: /healthz, Method: GET}}
+        Scenarios: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Path: /api/scenarios, Method: GET}}
+        Run: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Path: /api/run, Method: POST}}
+        Verify: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Path: /api/verify, Method: POST}}
+        ApprovalsList: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Path: /api/approvals, Method: GET}}
+        ApprovalsDecide: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Path: "/api/approvals/{id}", Method: POST}}
+
+  # ---- Edge -> cloud evidence intake (JSON only) ----------------------------------------------------
+  EvidenceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: guetteur-evidence
+      Description: Accepts small evidence bundles from the edge agent; rejects pictures; opens approval requests
+      Handler: guetteur.cloud.handler.lambda_handler
+      CodeUri: ../src/
+      Layers: [!Ref DepsLayer]
+      ReservedConcurrentExecutions: 2
+      Policies:
+        - DynamoDBCrudPolicy: {TableName: !Ref StateTable}
+      Events:
+        Evidence: {Type: HttpApi, Properties: {ApiId: !Ref HttpApi, Path: /api/evidence, Method: POST}}
+
+  # ---- Receipt re-check on evidence upload (S3 event -> OpenCV 5 check, arm64) ---------------------
+  # DRAFT: the handler for this trigger is not written yet (Day 8 in DESIGN.md). It re-runs both receipt
+  # checks on an opt-in depth snippet kept only after a human approved an escalation, then writes the verdict.
+  SnippetBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration: [{ServerSideEncryptionByDefault: {SSEAlgorithm: AES256}}]
+      PublicAccessBlockConfiguration: {BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true}
+      LifecycleConfiguration:
+        Rules: [{Id: expire-snippets, Status: Enabled, ExpirationInDays: 7}]
+
+  # ---- State: approvals + evidence (on-demand, TTL deletes everything) -----------------------------
+  StateTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{AttributeName: pk, AttributeType: S}]
+      KeySchema: [{AttributeName: pk, KeyType: HASH}]
+      TimeToLiveSpecification: {AttributeName: expires, Enabled: true}
+      SSESpecification: {SSEEnabled: true}
+
+  # ---- HTTP API with throttling and structured access logs -----------------------------------------
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      DefaultRouteSettings: {ThrottlingBurstLimit: 10, ThrottlingRateLimit: 5}
+      AccessLogSettings:
+        DestinationArn: !GetAtt ApiAccessLogs.Arn
+        Format: '{"t":"$context.requestTime","ip":"$context.identity.sourceIp","route":"$context.routeKey","status":"$context.status","ms":"$context.responseLatency"}'
+
+  ApiAccessLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: {RetentionInDays: 14}
+
+  # ---- Observability + cost guard ------------------------------------------------------------------
+  AlertTopic:
+    Type: AWS::SNS::Topic
+
+  AlertSubscription:
+    Type: AWS::SNS::Subscription
+    Condition: HasAlertEmail
+    Properties: {TopicArn: !Ref AlertTopic, Protocol: email, Endpoint: !Ref AlertEmail}
+
+  ApiErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: API Lambda errors
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions: [{Name: FunctionName, Value: !Ref ApiFunction}]
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 3
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertTopic]
+
+  ApiThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Concurrency ceiling hit (abuse or a demo spike)
+      Namespace: AWS/Lambda
+      MetricName: Throttles
+      Dimensions: [{Name: FunctionName, Value: !Ref ApiFunction}]
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 20
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertTopic]
+
+  Budget:
+    Type: AWS::Budgets::Budget
+    Condition: HasAlertEmail
+    Properties:
+      Budget:
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit: {Amount: !Ref MonthlyBudgetUsd, Unit: USD}
+      NotificationsWithSubscribers:
+        - Notification: {NotificationType: ACTUAL, ComparisonOperator: GREATER_THAN, Threshold: 50, ThresholdType: PERCENTAGE}
+          Subscribers: [{SubscriptionType: EMAIL, Address: !Ref AlertEmail}]
+        - Notification: {NotificationType: ACTUAL, ComparisonOperator: GREATER_THAN, Threshold: 80, ThresholdType: PERCENTAGE}
+          Subscribers: [{SubscriptionType: EMAIL, Address: !Ref AlertEmail}]
+
+Conditions:
+  HasAlertEmail: !Not [!Equals [!Ref AlertEmail, ""]]
+
+Outputs:
+  JudgeUrl:
+    Description: Judge-facing dashboard (HTTPS, synthetic scenes)
+    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+  StateTableName:
+    Value: !Ref StateTable
+  SnippetBucketName:
+    Value: !Ref SnippetBucket

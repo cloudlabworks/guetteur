@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.aws-sam/
+build/
+dist/
+*.egg-info/
+# generated clips are reproducible from seeds; the committed demo clips live in data/
+/tmp/
+/runs/
+/eval/runs/
+/data/
+/logs/*.tmp
