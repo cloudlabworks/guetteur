@@ -55,7 +55,7 @@ Loop budget at 5 fps is 200 ms/frame. Measured over 1425 frames (2 zones each): 
 | `calcOpticalFlowFarneback` | 1.3188 | 1.4329 |
 | `resize_INTER_AREA_6x8` | 0.0042 | 0.0043 |
 
-These are the numbers to re-measure on Lambda arm64 (Graviton) after the first deploy; none have been measured there.
+~~None have been measured on Lambda arm64.~~ The table above remains the original local benchmark. Subsequent deployed request samples are in `docs/submission/aws-smoke-summary.json` and the technical report; they are not a rerun of this per-call benchmark.
 
 ## Known weaknesses (not hidden)
 

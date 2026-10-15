@@ -1,6 +1,6 @@
 # Guetteur: active perception with receipts
 
-**Team Drift. OpenCV AI Competition 2026, powered by AWS. Agentic Vision path. Technical report, updated 2026-10-14.**
+**Team Drift. OpenCV AI Competition 2026, powered by AWS. Agentic Vision path. Technical report, updated 2026-10-15.**
 
 > **Status of the evidence.** Accuracy and comparative benchmark figures are from **synthetic** depth scenes on an M4 Pro. The AWS judge endpoint is deployed and fresh synthetic smoke results are included below. Physical OAK-D capture has been verified for three 300-frame takes; calibrated replay and real-world accuracy are **not measured**. The public AWS demo does not ingest live camera data. The dashboard's gate selector simulates approval decisions, not an authenticated cloud approval workflow.
 
@@ -44,7 +44,7 @@ that anyone can re-check.
 
 ![Architecture](diagrams/architecture.png)
 
-*Figure 1. Architecture. Solid paths exist in code and are exercised by the tests. The dotted "phase 2" path (JSON-only evidence intake, approvals, DynamoDB with TTL, private S3 with a 7-day lifecycle) is written but has never run on AWS and is not in the first deploy.*
+*Figure 1. Deployed AWS judge path and separate physical recorder. The public demo runs built-in synthetic scenes. There is no deployed path from the physical recorder to the cloud detector or an authenticated approval service. The perception-decision-action loop is detailed in Figure 2.*
 
 | Part | Status |
 | --- | --- |
@@ -288,6 +288,10 @@ These are capture-integrity results, not accuracy results. Exact event intervals
 * **Single-camera, two fixed zones** in the prototype; no tracking of individuals, by design.
 
 ## 10. Responsible use and disclosure
+
+Final local test run (2026-10-15): `uv run pytest -q` — **94 passed in 99.08 seconds**.
+Demo narration uses Kokoro-82M, `am_michael` (Apache-2.0); it is synthetic speech, not a cloned voice.
+Diagram correction: the original figure said "concurrency cap"; this deployment has no reserved-concurrency reservation, as explained in section 6. The integrated live edge path is design/local code, not a deployed camera-to-cloud product.
 
 * Depth-only by construction: no faces, no images, no video stored or sent. Intended for spaces whose owner controls the camera and where people present know it is there; for homes and care settings only with the informed consent of everyone monitored. Not for workplace productivity monitoring, tracking individuals, or covert use. The system cannot say who someone is and is not designed to.
 * Human control: alerts require a person's approval; silence means no alert; claims carry their evidence basis; failures and limits are published.

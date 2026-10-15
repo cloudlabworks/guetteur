@@ -1,0 +1,96 @@
+{
+  "video_sha256": "3c23cfb2fb409dd422eda71946a7ede19c5e0f2cf6a28d1e406d316bab62686f",
+  "report_sha256": "d3cf61592753ba1e50b762abeb2ad4582e609313dfabccdbca522bbe87d0a5e5",
+  "media": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1600,
+        "height": 900,
+        "side_data_list": [
+          {}
+        ]
+      },
+      {
+        "codec_name": "aac",
+        "sample_rate": "22050",
+        "channels": 1
+      }
+    ],
+    "format": {
+      "duration": "232.156406",
+      "size": "5678745"
+    }
+  },
+  "scenes": [
+    {
+      "id": "intro",
+      "title": "Guetteur \u00b7 active perception with receipts",
+      "duration": 21.76,
+      "frames": 109,
+      "file": "intro.mp4"
+    },
+    {
+      "id": "architecture",
+      "title": "OpenCV 5 does the perception work on AWS",
+      "duration": 37.56,
+      "frames": 187,
+      "file": "architecture.mp4"
+    },
+    {
+      "id": "adaptive",
+      "title": "Ambiguity changes the next tool call",
+      "duration": 29.56,
+      "frames": 148,
+      "file": "adaptive.mp4"
+    },
+    {
+      "id": "baseline",
+      "title": "Same input \u00b7 naive baseline misses the change",
+      "duration": 20.910023,
+      "frames": 104,
+      "file": "baseline.mp4"
+    },
+    {
+      "id": "timeout",
+      "title": "No answer means no published alert",
+      "duration": 23.210023,
+      "frames": 115,
+      "file": "timeout.mp4"
+    },
+    {
+      "id": "tamper",
+      "title": "A hash is not enough \u00b7 remeasure the claim",
+      "duration": 28.46,
+      "frames": 141,
+      "file": "tamper.mp4"
+    },
+    {
+      "id": "failure",
+      "title": "Documented failure \u00b7 below the noise floor",
+      "duration": 20.310023,
+      "frames": 101,
+      "file": "failure.mp4"
+    },
+    {
+      "id": "results",
+      "title": "Results, limits, and reproducibility",
+      "duration": 50.310023,
+      "frames": 250,
+      "file": "results.mp4"
+    }
+  ],
+  "aws_recording_checks": "6 HTTP 200 responses; adaptive pass, naive miss, timeout zero alerts, tamper rejected, documented miss retained",
+  "tests": "94 passed in 99.08 seconds",
+  "audio_mean_db": -20.1,
+  "audio_peak_db": -1.0,
+  "visual_review": [
+    "intro",
+    "adaptive",
+    "tamper",
+    "results"
+  ],
+  "narration": "Kokoro-82M am_michael, synthetic, Apache-2.0"
+}

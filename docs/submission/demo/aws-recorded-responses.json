@@ -1,0 +1,1142 @@
+[
+  {
+    "url": "https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/api/run",
+    "status": 200,
+    "body": {
+      "synthetic": true,
+      "scenario": "subtle_item_removed",
+      "seed": 0,
+      "planner": "rule-v1",
+      "gate": "approve",
+      "note": "A low item (25 mm relief, ambiguous in a single frame) is taken at frame 60: the agent has to ask for more evidence before it claims anything.",
+      "score": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "latency_frames": [
+          9
+        ],
+        "behaviours_missing": [],
+        "success": true,
+        "known_miss": false
+      },
+      "counters": {
+        "frames": 145,
+        "planner_calls": 5,
+        "skipped_not_salient": 279,
+        "skipped_paused": 0,
+        "rechecks": 1,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 1,
+        "approved": 1,
+        "denied": 0,
+        "timeouts": 0,
+        "policy_rejections": 0
+      },
+      "trace": [
+        {
+          "step": 2,
+          "frame": 97,
+          "zone": "shelf",
+          "planner": "rule-v1",
+          "observation": {
+            "zone": "shelf",
+            "frame": 97,
+            "valid_frac": 1.002,
+            "noise_ratio": 1.12,
+            "shift": 0.0003,
+            "persist": 3,
+            "integrated_n": 1,
+            "occupants": 0,
+            "blobs": [
+              {
+                "bbox": [
+                  135,
+                  176,
+                  99,
+                  136
+                ],
+                "cx": 0.71,
+                "cy": 0.65,
+                "area_mm2": 85059.41,
+                "z_mm": 1821,
+                "dz_mm": 24,
+                "snr": 3.34,
+                "width_mm": 305.95,
+                "height_mm": 339.03,
+                "flow_px": 0,
+                "occupant": false,
+                "zone_frac": 0.05
+              }
+            ],
+            "grid": [
+              [
+                1,
+                0,
+                0,
+                -2,
+                2,
+                1,
+                -2,
+                0
+              ],
+              [
+                -2,
+                2,
+                -1,
+                2,
+                -1,
+                0,
+                0,
+                2
+              ],
+              [
+                -1,
+                0,
+                0,
+                0,
+                -1,
+                2,
+                1,
+                1
+              ],
+              [
+                1,
+                -1,
+                1,
+                -1,
+                6,
+                17,
+                10,
+                -1
+              ],
+              [
+                2,
+                1,
+                -1,
+                1,
+                3,
+                15,
+                10,
+                -1
+              ],
+              [
+                0,
+                0,
+                -1,
+                0,
+                1,
+                2,
+                0,
+                0
+              ]
+            ]
+          },
+          "action": {
+            "kind": "recheck_zone",
+            "zone": "shelf",
+            "args": {
+              "n": 7,
+              "k": 2
+            },
+            "rationale": "contrast 3.3 is between 2.0 and 4.5: integrate 7 frames and look again",
+            "cited": {
+              "snr": 3.3,
+              "dz_mm": 24,
+              "area_cm2": 850,
+              "persist": 3,
+              "integrated_n": 1
+            }
+          },
+          "outcome": {
+            "status": "ok",
+            "detail": "collecting 7 frames"
+          },
+          "planner_ms": 0.039
+        },
+        {
+          "step": 3,
+          "frame": 104,
+          "zone": "shelf",
+          "planner": "rule-v1",
+          "observation": {
+            "zone": "shelf",
+            "frame": 104,
+            "valid_frac": 1.021,
+            "noise_ratio": 1.19,
+            "shift": 0.0003,
+            "persist": 10,
+            "integrated_n": 7,
+            "occupants": 0,
+            "blobs": [
+              {
+                "bbox": [
+                  139,
+                  177,
+                  99,
+                  137
+                ],
+                "cx": 0.7,
+                "cy": 0.65,
+                "area_mm2": 89298.71,
+                "z_mm": 1821,
+                "dz_mm": 24,
+                "snr": 5.23,
+                "width_mm": 314.22,
+                "height_mm": 314.22,
+                "flow_px": 0,
+                "occupant": false,
+                "zone_frac": 0.05
+              }
+            ],
+            "grid": [
+              [
+                0,
+                -1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                -1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                -2,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                7,
+                18,
+                12,
+                -1
+              ],
+              [
+                -1,
+                -1,
+                0,
+                1,
+                5,
+                14,
+                9,
+                1
+              ],
+              [
+                0,
+                0,
+                -1,
+                0,
+                0,
+                0,
+                1,
+                0
+              ]
+            ]
+          },
+          "action": {
+            "kind": "request_approval",
+            "zone": "shelf",
+            "args": {
+              "kind": "object_removed"
+            },
+            "rationale": "clear change (+24 mm) held for 10 frames",
+            "cited": {
+              "snr": 5.2,
+              "dz_mm": 24,
+              "area_cm2": 892,
+              "persist": 10,
+              "integrated_n": 7
+            }
+          },
+          "outcome": {
+            "status": "approved",
+            "detail": "approved by scripted-operator: alert published",
+            "claim": "c1",
+            "request": "a1"
+          },
+          "planner_ms": 0.043
+        }
+      ],
+      "claims": [
+        {
+          "id": "c1",
+          "run": "subtle_item_removed_s0_rule",
+          "kind": "object_removed",
+          "zone": "shelf",
+          "region": [
+            144,
+            172,
+            104,
+            132
+          ],
+          "evidence": [
+            97,
+            105
+          ],
+          "baseline": [
+            0,
+            60
+          ],
+          "asserted": {
+            "dz_mm": 24
+          },
+          "clip": {
+            "path": null,
+            "scenario": "subtle_item_removed",
+            "seed": 0,
+            "digest": "c10aa60abc2c226fc0fb8518e7e56f98f5c19805f3de56fd730186750217dea5"
+          },
+          "created_frame": 104,
+          "text": "shelf: a 892 cm2 region became farther by 24 mm and stayed so for 10 frames (object removed)",
+          "tol": {
+            "abs_mm": 8,
+            "rel": 0.25,
+            "valid_abs": 0.08,
+            "gain_abs": 0.01
+          },
+          "version": 1
+        }
+      ],
+      "alerts": [
+        {
+          "frame": 104,
+          "kind": "object_removed",
+          "zone": "shelf",
+          "claim": "c1",
+          "text": "shelf: a 892 cm2 region became farther by 24 mm and stayed so for 10 frames (object removed)",
+          "approved_by": "scripted-operator"
+        }
+      ],
+      "receipts": {
+        "c1": {
+          "numpy-region-stats": {
+            "pass": true,
+            "detail": "object_removed: measured +24 mm vs asserted +24 mm; 98% of 784 region pixels moved that way"
+          },
+          "opencv-region-stats": {
+            "pass": true,
+            "detail": "object_removed: frame-mean shift +25 mm (standard error 0.2) vs asserted +24 mm"
+          },
+          "proven": true
+        }
+      },
+      "runtime_ms": {
+        "server_total": 5525.3,
+        "median_frame_loop": 29.64
+      }
+    }
+  },
+  {
+    "url": "https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/api/run",
+    "status": 200,
+    "body": {
+      "synthetic": true,
+      "scenario": "subtle_item_removed",
+      "seed": 0,
+      "planner": "naive-threshold",
+      "gate": "approve",
+      "note": "A low item (25 mm relief, ambiguous in a single frame) is taken at frame 60: the agent has to ask for more evidence before it claims anything.",
+      "score": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "latency_frames": [],
+        "behaviours_missing": [
+          "min_rechecks"
+        ],
+        "success": false,
+        "known_miss": false
+      },
+      "counters": {
+        "frames": 145,
+        "planner_calls": 111,
+        "skipped_not_salient": 179,
+        "skipped_paused": 0,
+        "rechecks": 0,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 0,
+        "approved": 0,
+        "denied": 0,
+        "timeouts": 0,
+        "policy_rejections": 0
+      },
+      "trace": [],
+      "claims": [],
+      "alerts": [],
+      "receipts": {},
+      "runtime_ms": {
+        "server_total": 5402.9,
+        "median_frame_loop": 30.64
+      }
+    }
+  },
+  {
+    "url": "https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/api/run",
+    "status": 200,
+    "body": {
+      "synthetic": true,
+      "scenario": "shelf_item_removed",
+      "seed": 0,
+      "planner": "rule-v1",
+      "gate": "timeout",
+      "note": "The obvious item (300 mm proud of the shelf) is taken at frame 60.",
+      "score": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "latency_frames": [
+          9
+        ],
+        "behaviours_missing": [],
+        "success": true,
+        "known_miss": false
+      },
+      "counters": {
+        "frames": 125,
+        "planner_calls": 91,
+        "skipped_not_salient": 159,
+        "skipped_paused": 0,
+        "rechecks": 0,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 1,
+        "approved": 0,
+        "denied": 0,
+        "timeouts": 1,
+        "policy_rejections": 0,
+        "suppressed": 80
+      },
+      "trace": [
+        {
+          "step": 9,
+          "frame": 104,
+          "zone": "shelf",
+          "planner": "rule-v1",
+          "observation": {
+            "zone": "shelf",
+            "frame": 104,
+            "valid_frac": 0.999,
+            "noise_ratio": 1.01,
+            "shift": 0,
+            "persist": 10,
+            "integrated_n": 1,
+            "occupants": 0,
+            "blobs": [
+              {
+                "bbox": [
+                  90,
+                  130,
+                  39,
+                  77
+                ],
+                "cx": 0.29,
+                "cy": 0.37,
+                "area_mm2": 96503.48,
+                "z_mm": 1811,
+                "dz_mm": 301,
+                "snr": 58.38,
+                "width_mm": 312.5,
+                "height_mm": 328.94,
+                "flow_px": 0,
+                "occupant": false,
+                "zone_frac": 0.06
+              }
+            ],
+            "grid": [
+              [
+                1,
+                0,
+                0,
+                0,
+                1,
+                -1,
+                0,
+                3
+              ],
+              [
+                0,
+                101,
+                146,
+                49,
+                1,
+                -1,
+                1,
+                -1
+              ],
+              [
+                0,
+                182,
+                275,
+                90,
+                -1,
+                1,
+                -3,
+                -1
+              ],
+              [
+                0,
+                2,
+                2,
+                -2,
+                3,
+                1,
+                1,
+                -1
+              ],
+              [
+                -1,
+                -2,
+                0,
+                -1,
+                0,
+                1,
+                -2,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                -1,
+                -2,
+                0,
+                -1,
+                0
+              ]
+            ]
+          },
+          "action": {
+            "kind": "request_approval",
+            "zone": "shelf",
+            "args": {
+              "kind": "object_removed"
+            },
+            "rationale": "clear change (+301 mm) held for 10 frames",
+            "cited": {
+              "snr": 58.4,
+              "dz_mm": 301,
+              "area_cm2": 965,
+              "persist": 10,
+              "integrated_n": 1
+            }
+          },
+          "outcome": {
+            "status": "denied_timeout",
+            "detail": "no human answered; default is deny, nothing was published",
+            "claim": "c1",
+            "request": "a1"
+          },
+          "planner_ms": 0.031
+        },
+        {
+          "step": 10,
+          "frame": 105,
+          "zone": "shelf",
+          "planner": "rule-v1",
+          "observation": {
+            "zone": "shelf",
+            "frame": 105,
+            "valid_frac": 0.999,
+            "noise_ratio": 1.09,
+            "shift": 0.0003,
+            "persist": 11,
+            "integrated_n": 1,
+            "occupants": 0,
+            "blobs": [
+              {
+                "bbox": [
+                  89,
+                  131,
+                  39,
+                  77
+                ],
+                "cx": 0.29,
+                "cy": 0.37,
+                "area_mm2": 97437.57,
+                "z_mm": 1809,
+                "dz_mm": 299,
+                "snr": 57.73,
+                "width_mm": 312.15,
+                "height_mm": 345.01,
+                "flow_px": 0,
+                "occupant": false,
+                "zone_frac": 0.06
+              }
+            ],
+            "grid": [
+              [
+                0,
+                -1,
+                -2,
+                1,
+                0,
+                2,
+                3,
+                2
+              ],
+              [
+                1,
+                97,
+                145,
+                48,
+                1,
+                -1,
+                1,
+                1
+              ],
+              [
+                0,
+                183,
+                274,
+                95,
+                0,
+                -2,
+                0,
+                -1
+              ],
+              [
+                2,
+                -1,
+                1,
+                3,
+                0,
+                1,
+                1,
+                0
+              ],
+              [
+                2,
+                -1,
+                -1,
+                2,
+                2,
+                2,
+                1,
+                1
+              ],
+              [
+                -1,
+                1,
+                2,
+                1,
+                -1,
+                2,
+                0,
+                -1
+              ]
+            ]
+          },
+          "action": {
+            "kind": "request_approval",
+            "zone": "shelf",
+            "args": {
+              "kind": "object_removed"
+            },
+            "rationale": "clear change (+299 mm) held for 11 frames",
+            "cited": {
+              "snr": 57.7,
+              "dz_mm": 299,
+              "area_cm2": 974,
+              "persist": 11,
+              "integrated_n": 1
+            }
+          },
+          "outcome": {
+            "status": "suppressed",
+            "detail": "same alert was already decided (cooldown / sensor fault already reported)"
+          },
+          "planner_ms": 0.031
+        }
+      ],
+      "claims": [
+        {
+          "id": "c1",
+          "run": "shelf_item_removed_s0_rule",
+          "kind": "object_removed",
+          "zone": "shelf",
+          "region": [
+            96,
+            124,
+            44,
+            72
+          ],
+          "evidence": [
+            97,
+            105
+          ],
+          "baseline": [
+            0,
+            60
+          ],
+          "asserted": {
+            "dz_mm": 301
+          },
+          "clip": {
+            "path": null,
+            "scenario": "shelf_item_removed",
+            "seed": 0,
+            "digest": "1191b3905d1b80fab7f05ef539fcaefc0d0bc09ae6edaf72eb9dd18ba12bd4d9"
+          },
+          "created_frame": 104,
+          "text": "shelf: a 965 cm2 region became farther by 301 mm and stayed so for 10 frames (object removed)",
+          "tol": {
+            "abs_mm": 8,
+            "rel": 0.25,
+            "valid_abs": 0.08,
+            "gain_abs": 0.01
+          },
+          "version": 1
+        }
+      ],
+      "alerts": [],
+      "receipts": {
+        "c1": {
+          "numpy-region-stats": {
+            "pass": true,
+            "detail": "object_removed: measured +300 mm vs asserted +301 mm; 100% of 784 region pixels moved that way"
+          },
+          "opencv-region-stats": {
+            "pass": true,
+            "detail": "object_removed: frame-mean shift +300 mm (standard error 0.4) vs asserted +301 mm"
+          },
+          "proven": true
+        }
+      },
+      "runtime_ms": {
+        "server_total": 4897,
+        "median_frame_loop": 32.07
+      }
+    }
+  },
+  {
+    "url": "https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/api/run",
+    "status": 200,
+    "body": {
+      "synthetic": true,
+      "scenario": "subtle_item_removed",
+      "seed": 0,
+      "planner": "rule-v1",
+      "gate": "approve",
+      "note": "A low item (25 mm relief, ambiguous in a single frame) is taken at frame 60: the agent has to ask for more evidence before it claims anything.",
+      "score": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "latency_frames": [
+          9
+        ],
+        "behaviours_missing": [],
+        "success": true,
+        "known_miss": false
+      },
+      "counters": {
+        "frames": 145,
+        "planner_calls": 5,
+        "skipped_not_salient": 279,
+        "skipped_paused": 0,
+        "rechecks": 1,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 1,
+        "approved": 1,
+        "denied": 0,
+        "timeouts": 0,
+        "policy_rejections": 0
+      },
+      "trace": [
+        {
+          "step": 2,
+          "frame": 97,
+          "zone": "shelf",
+          "planner": "rule-v1",
+          "observation": {
+            "zone": "shelf",
+            "frame": 97,
+            "valid_frac": 1.002,
+            "noise_ratio": 1.12,
+            "shift": 0.0003,
+            "persist": 3,
+            "integrated_n": 1,
+            "occupants": 0,
+            "blobs": [
+              {
+                "bbox": [
+                  135,
+                  176,
+                  99,
+                  136
+                ],
+                "cx": 0.71,
+                "cy": 0.65,
+                "area_mm2": 85059.41,
+                "z_mm": 1821,
+                "dz_mm": 24,
+                "snr": 3.34,
+                "width_mm": 305.95,
+                "height_mm": 339.03,
+                "flow_px": 0,
+                "occupant": false,
+                "zone_frac": 0.05
+              }
+            ],
+            "grid": [
+              [
+                1,
+                0,
+                0,
+                -2,
+                2,
+                1,
+                -2,
+                0
+              ],
+              [
+                -2,
+                2,
+                -1,
+                2,
+                -1,
+                0,
+                0,
+                2
+              ],
+              [
+                -1,
+                0,
+                0,
+                0,
+                -1,
+                2,
+                1,
+                1
+              ],
+              [
+                1,
+                -1,
+                1,
+                -1,
+                6,
+                17,
+                10,
+                -1
+              ],
+              [
+                2,
+                1,
+                -1,
+                1,
+                3,
+                15,
+                10,
+                -1
+              ],
+              [
+                0,
+                0,
+                -1,
+                0,
+                1,
+                2,
+                0,
+                0
+              ]
+            ]
+          },
+          "action": {
+            "kind": "recheck_zone",
+            "zone": "shelf",
+            "args": {
+              "n": 7,
+              "k": 2
+            },
+            "rationale": "contrast 3.3 is between 2.0 and 4.5: integrate 7 frames and look again",
+            "cited": {
+              "snr": 3.3,
+              "dz_mm": 24,
+              "area_cm2": 850,
+              "persist": 3,
+              "integrated_n": 1
+            }
+          },
+          "outcome": {
+            "status": "ok",
+            "detail": "collecting 7 frames"
+          },
+          "planner_ms": 0.039
+        },
+        {
+          "step": 3,
+          "frame": 104,
+          "zone": "shelf",
+          "planner": "rule-v1",
+          "observation": {
+            "zone": "shelf",
+            "frame": 104,
+            "valid_frac": 1.021,
+            "noise_ratio": 1.19,
+            "shift": 0.0003,
+            "persist": 10,
+            "integrated_n": 7,
+            "occupants": 0,
+            "blobs": [
+              {
+                "bbox": [
+                  139,
+                  177,
+                  99,
+                  137
+                ],
+                "cx": 0.7,
+                "cy": 0.65,
+                "area_mm2": 89298.71,
+                "z_mm": 1821,
+                "dz_mm": 24,
+                "snr": 5.23,
+                "width_mm": 314.22,
+                "height_mm": 314.22,
+                "flow_px": 0,
+                "occupant": false,
+                "zone_frac": 0.05
+              }
+            ],
+            "grid": [
+              [
+                0,
+                -1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                -1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                -2,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                7,
+                18,
+                12,
+                -1
+              ],
+              [
+                -1,
+                -1,
+                0,
+                1,
+                5,
+                14,
+                9,
+                1
+              ],
+              [
+                0,
+                0,
+                -1,
+                0,
+                0,
+                0,
+                1,
+                0
+              ]
+            ]
+          },
+          "action": {
+            "kind": "request_approval",
+            "zone": "shelf",
+            "args": {
+              "kind": "object_removed"
+            },
+            "rationale": "clear change (+24 mm) held for 10 frames",
+            "cited": {
+              "snr": 5.2,
+              "dz_mm": 24,
+              "area_cm2": 892,
+              "persist": 10,
+              "integrated_n": 7
+            }
+          },
+          "outcome": {
+            "status": "approved",
+            "detail": "approved by scripted-operator: alert published",
+            "claim": "c1",
+            "request": "a1"
+          },
+          "planner_ms": 0.031
+        }
+      ],
+      "claims": [
+        {
+          "id": "c1",
+          "run": "subtle_item_removed_s0_rule",
+          "kind": "object_removed",
+          "zone": "shelf",
+          "region": [
+            144,
+            172,
+            104,
+            132
+          ],
+          "evidence": [
+            97,
+            105
+          ],
+          "baseline": [
+            0,
+            60
+          ],
+          "asserted": {
+            "dz_mm": 24
+          },
+          "clip": {
+            "path": null,
+            "scenario": "subtle_item_removed",
+            "seed": 0,
+            "digest": "c10aa60abc2c226fc0fb8518e7e56f98f5c19805f3de56fd730186750217dea5"
+          },
+          "created_frame": 104,
+          "text": "shelf: a 892 cm2 region became farther by 24 mm and stayed so for 10 frames (object removed)",
+          "tol": {
+            "abs_mm": 8,
+            "rel": 0.25,
+            "valid_abs": 0.08,
+            "gain_abs": 0.01
+          },
+          "version": 1
+        }
+      ],
+      "alerts": [
+        {
+          "frame": 104,
+          "kind": "object_removed",
+          "zone": "shelf",
+          "claim": "c1",
+          "text": "shelf: a 892 cm2 region became farther by 24 mm and stayed so for 10 frames (object removed)",
+          "approved_by": "scripted-operator"
+        }
+      ],
+      "receipts": {
+        "c1": {
+          "numpy-region-stats": {
+            "pass": true,
+            "detail": "object_removed: measured +24 mm vs asserted +24 mm; 98% of 784 region pixels moved that way"
+          },
+          "opencv-region-stats": {
+            "pass": true,
+            "detail": "object_removed: frame-mean shift +25 mm (standard error 0.2) vs asserted +24 mm"
+          },
+          "proven": true
+        }
+      },
+      "runtime_ms": {
+        "server_total": 5471.9,
+        "median_frame_loop": 31.33
+      }
+    }
+  },
+  {
+    "url": "https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/api/verify",
+    "status": 200,
+    "body": {
+      "numpy-region-stats": {
+        "pass": false,
+        "detail": "object_removed: measured +24 mm vs asserted +48 mm; 98% of 784 region pixels moved that way"
+      },
+      "opencv-region-stats": {
+        "pass": false,
+        "detail": "object_removed: frame-mean shift +25 mm (standard error 0.2) vs asserted +48 mm"
+      },
+      "proven": false
+    }
+  },
+  {
+    "url": "https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/api/run",
+    "status": 200,
+    "body": {
+      "synthetic": true,
+      "scenario": "subthreshold_item_removed",
+      "seed": 0,
+      "planner": "rule-v1",
+      "gate": "approve",
+      "note": "FAILURE CASE: a 10 mm-relief item (about 1 sigma after filtering) is removed at frame 60. Below the noise floor; the system is expected to miss it.",
+      "score": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "latency_frames": [],
+        "behaviours_missing": [],
+        "success": false,
+        "known_miss": true
+      },
+      "counters": {
+        "frames": 125,
+        "planner_calls": 6,
+        "skipped_not_salient": 244,
+        "skipped_paused": 0,
+        "rechecks": 0,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 0,
+        "approved": 0,
+        "denied": 0,
+        "timeouts": 0,
+        "policy_rejections": 0
+      },
+      "trace": [],
+      "claims": [],
+      "alerts": [],
+      "receipts": {},
+      "runtime_ms": {
+        "server_total": 4859.5,
+        "median_frame_loop": 31.24
+      }
+    }
+  }
+]

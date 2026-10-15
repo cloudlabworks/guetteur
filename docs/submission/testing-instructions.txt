@@ -1,0 +1,24 @@
+No login, camera, or credentials are required for the public judge demo:
+https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/
+
+The dashboard runs built-in SYNTHETIC depth scenes on AWS Lambda arm64 with OpenCV 5. It is not a live camera stream. The approve/deny/timeout selector simulates the human gate; authenticated real-camera approvals remain phase 2.
+
+1. Select subtle_item_removed, rule, approve, seed 0; Run the loop. Inspect recheck_zone (7 frames), the later request_approval, one published alert, and both PASS receipts.
+2. Repeat with planner naive. The same scene is missed; task FAILED is expected.
+3. Select shelf_item_removed, rule, timeout. Inspect the approval timeout and "Alerts that left the system: none". The score concerns detection/approval requests, not published alerts.
+4. Rerun subtle_item_removed with rule/approve. Click "Tamper: double the claim". NumPy and OpenCV should both FAIL and the claim should be rejected.
+5. Select subthreshold_item_removed, rule, approve. A documented missed event/task failure is expected; we do not count it as success.
+6. Optional: person_takes_item shows pause_zone; lens_obstructed shows sensor-fault handling.
+
+Reproduce locally (Python 3.12 and uv):
+git clone https://github.com/cloudlabworks/guetteur.git
+cd guetteur
+uv sync --frozen
+uv run pytest
+uv run guetteur demo
+uv run guetteur serve
+Open http://127.0.0.1:8080/. Evaluation: uv run guetteur eval. Deployment: deploy/ and INFRA/README.md.
+
+Technical report: attached PDF; source and diagrams in docs/report/. Evaluation methodology and failures: docs/EVALUATION.md. Saved AWS checks and physical-capture integrity manifest: docs/submission/.
+
+All published accuracy metrics are synthetic development-set results, not held-out real-world accuracy. Three physical depth-only takes have verified integrity and clean shutdown; calibration, interval labels and real-depth detector evaluation remain open. AI coding assistance was used. The evaluated planner is deterministic code, not an LLM. Demo narration uses Kokoro-82M, am_michael, Apache-2.0; no voice clone.
