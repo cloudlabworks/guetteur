@@ -46,6 +46,12 @@ uv run guetteur serve                      # the judge dashboard + API on http:/
 Re-verify any ledger yourself: `uv run guetteur verify-ledger runs/<run>/receipts.md` (runs the vendored
 `third_party/prove_it_done/verify_receipts.py`, pinned to prove-it-done commit `d897534`).
 
+## Optional physical-camera capture
+
+An opt-in, depth-only native recorder and operator run sheet are available in
+[`docs/REAL_DEPTH_CAPTURE.md`](docs/REAL_DEPTH_CAPTURE.md). Hardware capture and calibrated replay
+remain unverified; this does not change the synthetic-only status of the evaluation.
+
 ## Layout
 
 | Path | What |
