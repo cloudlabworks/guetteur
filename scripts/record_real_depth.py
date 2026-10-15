@@ -27,6 +27,11 @@ def validate_frame(frame):
     return frame
 
 
+def capture_slot(elapsed, fps):
+    """Use absolute time bins so sensor/host jitter cannot accumulate cadence drift."""
+    return int(elapsed * fps)
+
+
 def check_destination(path: Path):
     path = path.expanduser().resolve()
     repo = Path(__file__).resolve().parents[1]
@@ -116,7 +121,8 @@ def main(argv=None):
         return 2
     cap=None;calibration=None
     try:
-        with dai.Device(info) as device, dai.Pipeline(device) as pipeline:
+        device = dai.Device(info)
+        with dai.Pipeline(device) as pipeline:
             left=pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_B, sensorFps=15)
             right=pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_C, sensorFps=15)
             stereo=pipeline.create(dai.node.StereoDepth)
@@ -125,18 +131,19 @@ def main(argv=None):
             queue=stereo.depth.createOutputQueue(maxSize=2,blocking=False)
             pipeline.start()
             cap=Capture(args.out,args.scene,args.seconds,args.fps)
-            started=time.monotonic();last_frame=started;last_saved=-1e9
+            started=time.monotonic();last_frame=started;last_slot=-1
             print('Recording depth only. Keep the scene still for the first 12 seconds.',flush=True)
             while pipeline.isRunning() and time.monotonic()-started < args.seconds:
                 now=time.monotonic();message=queue.tryGet()
                 if message is not None:
                     last_frame=now
-                    if now-last_saved >= 1/args.fps:
+                    slot=capture_slot(now-started,args.fps)
+                    if slot > last_slot:
                         frame=validate_frame(message.getFrame())
                         if calibration is None:
                             h,w=frame.shape
                             calibration=device.readCalibration().getCameraIntrinsics(dai.CameraBoardSocket.CAM_C,w,h)
-                        cap.add(frame,now-started);last_saved=now
+                        cap.add(frame,now-started);last_slot=slot
                 if now-last_frame > 10:
                     raise TimeoutError('No depth frames for ten seconds')
                 time.sleep(.005)

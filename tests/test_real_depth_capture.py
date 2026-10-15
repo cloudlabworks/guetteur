@@ -35,3 +35,10 @@ def test_timestamp_and_shape_guard(tmp_path):
 @pytest.mark.parametrize('seconds,fps',[(0,5),(301,5),(60,11)])
 def test_bounded_capture(tmp_path,seconds,fps):
     with pytest.raises(ValueError):m.Capture(tmp_path/'clip','empty',seconds,fps)
+
+
+def test_sampling_does_not_accumulate_sensor_jitter():
+    # 15-Hz sensor arrivals straddle each 5-Hz boundary by a few ms.
+    arrivals=[i/15 + .004*(i%3) for i in range(900)]
+    slots={m.capture_slot(t,5) for t in arrivals}
+    assert len(slots)==300
