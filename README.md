@@ -4,9 +4,12 @@
 using **OpenCV 5** evidence, stops at a **human gate** before anything outward-facing happens, and attaches a
 **re-runnable receipt** to every claim it makes.
 
-> **Status: local prototype, nothing deployed.** Every number in this repo comes from **synthetic** OAK-D-style depth
-> scenes (labelled as such, with machine-readable ground truth). No physical camera was used yet; no AWS account
-> was touched. See `DESIGN.md` for the plan and `docs/EVALUATION.md` for results and failure cases.
+> **Status (2026-10-14): AWS judge demo deployed; physical depth capture verified.**
+> Try [the live dashboard](https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/).
+> The published accuracy results remain **synthetic-only**. Three physical OAK-D depth takes
+> (empty baseline, walkthrough, item removal) each contain 300 integrity-checked 640x400 frames;
+> calibrated replay and real-world accuracy measurement remain open. The AWS demo runs built-in
+> synthetic scenes, not a live camera feed. See [current evidence](docs/submission/aws-smoke-summary.json).
 >
 > Built for the OpenCV AI Competition 2026 (Agentic Vision path). Rules notes with section citations: `docs/RULES_NOTES.md`.
 
@@ -49,8 +52,7 @@ Re-verify any ledger yourself: `uv run guetteur verify-ledger runs/<run>/receipt
 ## Optional physical-camera capture
 
 An opt-in, depth-only native recorder and operator run sheet are available in
-[`docs/REAL_DEPTH_CAPTURE.md`](docs/REAL_DEPTH_CAPTURE.md). Hardware capture and calibrated replay
-remain unverified; this does not change the synthetic-only status of the evaluation.
+[`docs/REAL_DEPTH_CAPTURE.md`](docs/REAL_DEPTH_CAPTURE.md). Hardware capture and clean shutdown are verified; calibrated replay remains open. This does not change the synthetic-only status of the accuracy evaluation.
 
 ## Layout
 
@@ -62,20 +64,22 @@ remain unverified; this does not change the synthetic-only status of the evaluat
 | `src/guetteur/receipts.py`, `check_numpy.py`, `check_cv.py` | claims, ledger writer, the two independent re-checks |
 | `src/guetteur/synth.py` | synthetic depth scenes with ground truth (11 scenarios) |
 | `src/guetteur/cloud/` | the Lambda handler (also served locally), dashboard page, approval/evidence store |
-| `INFRA/` | AWS SAM template (validated and built locally; not deployed) |
+| `INFRA/` | AWS SAM template for the deployed judge endpoint; optional phase-2 resources are not deployed |
 | `deploy/` | credential-free CloudShell deploy kit: `cloudshell-deploy.sh`, `make-artifact.sh`, guardrail check |
 | `third_party/prove_it_done/` | vendored verifier (MIT), provenance in `PROVENANCE.md` |
 | `tests/` | unit, scenario, receipt/tamper, and API tests |
-| `docs/` | `RULES_NOTES.md`, `EVALUATION.md` (generated), `TRACE_EXAMPLE.md`, `report/` (technical report draft, PDF) |
+| `docs/` | `RULES_NOTES.md`, `EVALUATION.md` (generated), `TRACE_EXAMPLE.md`, `report/` (technical report, PDF) |
 
 ## Honest limits
 
-* Synthetic scenes only so far. Real OAK-D recordings are needed before any real-world accuracy claim (`DESIGN.md` section 9).
+* Accuracy metrics are synthetic-only. Physical depth recordings exist, but calibration, interval labels, and held-out replay are still required before a real-world accuracy claim.
 * Depth cannot tell *what* an object is; claims say "a region became farther by 24 mm", not "a bottle was removed".
 * Changes under ~1 sigma after filtering are invisible (documented miss: `subthreshold_item_removed`).
 * The LLM planner is an interface plus tests with a fake model; no model is called.
-* The edge/cloud approval path (DynamoDB, S3, authenticated routes) is code plus local tests only; the first AWS deploy is planned as a public read-only endpoint (`INFRA/README.md`).
-* AWS pieces (`INFRA/`, `DynamoStore`) are a draft that has never run on AWS.
+* The edge/cloud approval path (DynamoDB, S3, authenticated routes) is code plus local tests only; the first AWS deployment is a public synthetic-demo endpoint (`INFRA/README.md`).
+* The deployed AWS scope is API Gateway + Lambda arm64 running OpenCV and receipt checks. DynamoDB, S3, and authenticated real-camera approvals remain phase-2 code with local tests only.
+* The dashboard gate selector simulates approve/deny/timeout; it is not a deployed authenticated human-approval workflow.
+* The demo has API throttling but no reserved-concurrency cap because the account quota could not support the reservation.
 
 ## License
 

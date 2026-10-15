@@ -1,0 +1,176 @@
+{
+  "checked_at": "2026-10-15T05:33:39.601174+00:00",
+  "endpoint": "https://nm4p814bp0.execute-api.us-west-2.amazonaws.com",
+  "runs": [
+    {
+      "name": "subtle_item_removed-rule-approve",
+      "score": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "latency_frames": [
+          9
+        ],
+        "behaviours_missing": [],
+        "success": true,
+        "known_miss": false
+      },
+      "alerts": 1,
+      "runtime_ms": {
+        "server_total": 5375.9,
+        "median_frame_loop": 28.37
+      },
+      "counters": {
+        "frames": 145,
+        "planner_calls": 5,
+        "skipped_not_salient": 279,
+        "skipped_paused": 0,
+        "rechecks": 1,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 1,
+        "approved": 1,
+        "denied": 0,
+        "timeouts": 0,
+        "policy_rejections": 0
+      }
+    },
+    {
+      "name": "subtle_item_removed-naive-approve",
+      "score": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "latency_frames": [],
+        "behaviours_missing": [
+          "min_rechecks"
+        ],
+        "success": false,
+        "known_miss": false
+      },
+      "alerts": 0,
+      "runtime_ms": {
+        "server_total": 5415.0,
+        "median_frame_loop": 32.15
+      },
+      "counters": {
+        "frames": 145,
+        "planner_calls": 111,
+        "skipped_not_salient": 179,
+        "skipped_paused": 0,
+        "rechecks": 0,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 0,
+        "approved": 0,
+        "denied": 0,
+        "timeouts": 0,
+        "policy_rejections": 0
+      }
+    },
+    {
+      "name": "shelf_item_removed-rule-timeout",
+      "score": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "latency_frames": [
+          9
+        ],
+        "behaviours_missing": [],
+        "success": true,
+        "known_miss": false
+      },
+      "alerts": 0,
+      "runtime_ms": {
+        "server_total": 4660.6,
+        "median_frame_loop": 30.12
+      },
+      "counters": {
+        "frames": 125,
+        "planner_calls": 91,
+        "skipped_not_salient": 159,
+        "skipped_paused": 0,
+        "rechecks": 0,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 1,
+        "approved": 0,
+        "denied": 0,
+        "timeouts": 1,
+        "policy_rejections": 0,
+        "suppressed": 80
+      }
+    },
+    {
+      "name": "lens_obstructed-rule-approve",
+      "score": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "latency_frames": [
+          2
+        ],
+        "behaviours_missing": [],
+        "success": true,
+        "known_miss": false
+      },
+      "alerts": 1,
+      "runtime_ms": {
+        "server_total": 2539.8,
+        "median_frame_loop": 1.41
+      },
+      "counters": {
+        "frames": 125,
+        "planner_calls": 161,
+        "skipped_not_salient": 89,
+        "skipped_paused": 0,
+        "rechecks": 0,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 1,
+        "approved": 1,
+        "denied": 0,
+        "timeouts": 0,
+        "policy_rejections": 0,
+        "suppressed": 155
+      }
+    },
+    {
+      "name": "subthreshold_item_removed-rule-approve",
+      "score": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "latency_frames": [],
+        "behaviours_missing": [],
+        "success": false,
+        "known_miss": true
+      },
+      "alerts": 0,
+      "runtime_ms": {
+        "server_total": 4767.5,
+        "median_frame_loop": 31.12
+      },
+      "counters": {
+        "frames": 125,
+        "planner_calls": 6,
+        "skipped_not_salient": 244,
+        "skipped_paused": 0,
+        "rechecks": 0,
+        "pauses": 0,
+        "degrades": 0,
+        "compensations": 0,
+        "requests": 0,
+        "approved": 0,
+        "denied": 0,
+        "timeouts": 0,
+        "policy_rejections": 0
+      }
+    }
+  ]
+}

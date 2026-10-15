@@ -1,0 +1,394 @@
+{
+  "synthetic": true,
+  "scenario": "lens_obstructed",
+  "seed": 0,
+  "planner": "rule-v1",
+  "gate": "approve",
+  "note": "From frame 70 the camera loses 92% of its depth (covered lens / washed-out IR). Must raise a sensor fault, not claim scene changes.",
+  "score": {
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
+    "latency_frames": [
+      2
+    ],
+    "behaviours_missing": [],
+    "success": true,
+    "known_miss": false
+  },
+  "counters": {
+    "frames": 125,
+    "planner_calls": 161,
+    "skipped_not_salient": 89,
+    "skipped_paused": 0,
+    "rechecks": 0,
+    "pauses": 0,
+    "degrades": 0,
+    "compensations": 0,
+    "requests": 1,
+    "approved": 1,
+    "denied": 0,
+    "timeouts": 0,
+    "policy_rejections": 0,
+    "suppressed": 155
+  },
+  "trace": [
+    {
+      "step": 5,
+      "frame": 107,
+      "zone": "shelf",
+      "planner": "rule-v1",
+      "observation": {
+        "zone": "shelf",
+        "frame": 107,
+        "valid_frac": 0.078,
+        "noise_ratio": 0.0,
+        "shift": 0.0,
+        "persist": 0,
+        "integrated_n": 1,
+        "occupants": 0,
+        "blobs": [],
+        "grid": [
+          [
+            -158,
+            -115,
+            -140,
+            -126,
+            -101,
+            -148,
+            -152,
+            -145
+          ],
+          [
+            -115,
+            -154,
+            -143,
+            -130,
+            -119,
+            -101,
+            -105,
+            -163
+          ],
+          [
+            -118,
+            -133,
+            -110,
+            -173,
+            -148,
+            -119,
+            -134,
+            -138
+          ],
+          [
+            -157,
+            -115,
+            -137,
+            -166,
+            -147,
+            -143,
+            -144,
+            -138
+          ],
+          [
+            -129,
+            -133,
+            -158,
+            -122,
+            -176,
+            -147,
+            -104,
+            -131
+          ],
+          [
+            -132,
+            -136,
+            -144,
+            -122,
+            -177,
+            -126,
+            -141,
+            -160
+          ]
+        ]
+      },
+      "action": {
+        "kind": "request_approval",
+        "zone": "shelf",
+        "args": {
+          "kind": "sensor_fault"
+        },
+        "rationale": "depth coverage collapsed and stayed down: ask a human to look at the camera",
+        "cited": {
+          "valid_frac": 0.08,
+          "fault_streak": 3
+        }
+      },
+      "outcome": {
+        "status": "approved",
+        "detail": "approved by scripted-operator: alert published",
+        "claim": "c1",
+        "request": "a1"
+      },
+      "planner_ms": 0.006
+    },
+    {
+      "step": 6,
+      "frame": 107,
+      "zone": "doorway",
+      "planner": "rule-v1",
+      "observation": {
+        "zone": "doorway",
+        "frame": 107,
+        "valid_frac": 0.08,
+        "noise_ratio": 0.0,
+        "shift": 0.0,
+        "persist": 0,
+        "integrated_n": 1,
+        "occupants": 0,
+        "blobs": [],
+        "grid": [
+          [
+            -381,
+            -298,
+            -299,
+            -306,
+            -280,
+            -243,
+            -255,
+            -196
+          ],
+          [
+            -206,
+            -260,
+            -283,
+            -220,
+            -183,
+            -265,
+            -353,
+            -267
+          ],
+          [
+            -243,
+            -244,
+            -310,
+            -300,
+            -264,
+            -259,
+            -228,
+            -267
+          ],
+          [
+            -254,
+            -276,
+            -283,
+            -316,
+            -237,
+            -281,
+            -315,
+            -316
+          ],
+          [
+            -291,
+            -271,
+            -288,
+            -204,
+            -291,
+            -244,
+            -271,
+            -311
+          ],
+          [
+            -196,
+            -266,
+            -240,
+            -295,
+            -232,
+            -233,
+            -304,
+            -273
+          ]
+        ]
+      },
+      "action": {
+        "kind": "request_approval",
+        "zone": "doorway",
+        "args": {
+          "kind": "sensor_fault"
+        },
+        "rationale": "depth coverage collapsed and stayed down: ask a human to look at the camera",
+        "cited": {
+          "valid_frac": 0.08,
+          "fault_streak": 3
+        }
+      },
+      "outcome": {
+        "status": "suppressed",
+        "detail": "same alert was already decided (cooldown / sensor fault already reported)"
+      },
+      "planner_ms": 0.006
+    },
+    {
+      "step": 7,
+      "frame": 108,
+      "zone": "shelf",
+      "planner": "rule-v1",
+      "observation": {
+        "zone": "shelf",
+        "frame": 108,
+        "valid_frac": 0.078,
+        "noise_ratio": 0.0,
+        "shift": 0.0,
+        "persist": 0,
+        "integrated_n": 1,
+        "occupants": 0,
+        "blobs": [],
+        "grid": [
+          [
+            -125,
+            -183,
+            -129,
+            -140,
+            -126,
+            -83,
+            -127,
+            -145
+          ],
+          [
+            -140,
+            -145,
+            -129,
+            -147,
+            -148,
+            -170,
+            -123,
+            -102
+          ],
+          [
+            -132,
+            -110,
+            -91,
+            -104,
+            -141,
+            -163,
+            -112,
+            -170
+          ],
+          [
+            -114,
+            -179,
+            -144,
+            -126,
+            -147,
+            -146,
+            -129,
+            -170
+          ],
+          [
+            -132,
+            -140,
+            -133,
+            -148,
+            -140,
+            -136,
+            -148,
+            -178
+          ],
+          [
+            -118,
+            -140,
+            -162,
+            -122,
+            -159,
+            -148,
+            -112,
+            -156
+          ]
+        ]
+      },
+      "action": {
+        "kind": "request_approval",
+        "zone": "shelf",
+        "args": {
+          "kind": "sensor_fault"
+        },
+        "rationale": "depth coverage collapsed and stayed down: ask a human to look at the camera",
+        "cited": {
+          "valid_frac": 0.08,
+          "fault_streak": 4
+        }
+      },
+      "outcome": {
+        "status": "suppressed",
+        "detail": "same alert was already decided (cooldown / sensor fault already reported)"
+      },
+      "planner_ms": 0.006
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "run": "lens_obstructed_s0_rule",
+      "kind": "sensor_fault",
+      "zone": "shelf",
+      "region": [
+        48,
+        216,
+        16,
+        160
+      ],
+      "evidence": [
+        105,
+        108
+      ],
+      "baseline": [
+        0,
+        60
+      ],
+      "asserted": {
+        "valid_frac": 0.08
+      },
+      "clip": {
+        "path": null,
+        "scenario": "lens_obstructed",
+        "seed": 0,
+        "digest": "84bbc4db5ef3d48d8bf49d5c9214d2cabb64fb02808d4a39f5c723e18d58ad42"
+      },
+      "created_frame": 107,
+      "text": "shelf: only 8% of the zone returns depth (sensor fault); scene judgements suspended",
+      "tol": {
+        "abs_mm": 8.0,
+        "rel": 0.25,
+        "valid_abs": 0.08,
+        "gain_abs": 0.01
+      },
+      "version": 1
+    }
+  ],
+  "alerts": [
+    {
+      "frame": 107,
+      "kind": "sensor_fault",
+      "zone": "shelf",
+      "claim": "c1",
+      "text": "shelf: only 8% of the zone returns depth (sensor fault); scene judgements suspended",
+      "approved_by": "scripted-operator"
+    }
+  ],
+  "receipts": {
+    "c1": {
+      "numpy-region-stats": {
+        "pass": true,
+        "detail": "sensor_fault: valid fraction 0.08 (asserted 0.08) vs 0.98 at baseline"
+      },
+      "opencv-region-stats": {
+        "pass": true,
+        "detail": "sensor_fault: cv2.countNonZero coverage 0.08 (asserted 0.08) vs 0.98 at baseline"
+      },
+      "proven": true
+    }
+  },
+  "runtime_ms": {
+    "server_total": 2539.8,
+    "median_frame_loop": 1.41
+  }
+}

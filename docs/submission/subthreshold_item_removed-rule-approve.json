@@ -1,0 +1,40 @@
+{
+  "synthetic": true,
+  "scenario": "subthreshold_item_removed",
+  "seed": 0,
+  "planner": "rule-v1",
+  "gate": "approve",
+  "note": "FAILURE CASE: a 10 mm-relief item (about 1 sigma after filtering) is removed at frame 60. Below the noise floor; the system is expected to miss it.",
+  "score": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1,
+    "latency_frames": [],
+    "behaviours_missing": [],
+    "success": false,
+    "known_miss": true
+  },
+  "counters": {
+    "frames": 125,
+    "planner_calls": 6,
+    "skipped_not_salient": 244,
+    "skipped_paused": 0,
+    "rechecks": 0,
+    "pauses": 0,
+    "degrades": 0,
+    "compensations": 0,
+    "requests": 0,
+    "approved": 0,
+    "denied": 0,
+    "timeouts": 0,
+    "policy_rejections": 0
+  },
+  "trace": [],
+  "claims": [],
+  "alerts": [],
+  "receipts": {},
+  "runtime_ms": {
+    "server_total": 4767.5,
+    "median_frame_loop": 31.12
+  }
+}

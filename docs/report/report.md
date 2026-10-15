@@ -1,11 +1,8 @@
 # Guetteur: active perception with receipts
 
-**Team Drift. OpenCV AI Competition 2026, powered by AWS. Agentic Vision path. Technical report, draft of 2026-10-12.**
+**Team Drift. OpenCV AI Competition 2026, powered by AWS. Agentic Vision path. Technical report, updated 2026-10-14.**
 
-> **Status of the evidence.** Every number in this report was measured on **synthetic** OAK-D-style depth scenes with
-> machine-readable ground truth, on a laptop-class CPU. No physical camera has been used yet and nothing has been
-> deployed to AWS yet. Places where live-camera results or the AWS endpoint will go are marked **TODO**. Nothing marked TODO
-> is claimed.
+> **Status of the evidence.** Accuracy and comparative benchmark figures are from **synthetic** depth scenes on an M4 Pro. The AWS judge endpoint is deployed and fresh synthetic smoke results are included below. Physical OAK-D capture has been verified for three 300-frame takes; calibrated replay and real-world accuracy are **not measured**. The public AWS demo does not ingest live camera data. The dashboard's gate selector simulates approval decisions, not an authenticated cloud approval workflow.
 
 ## 1. Summary
 
@@ -51,11 +48,11 @@ that anyone can re-check.
 
 | Part | Status |
 | --- | --- |
-| Perception, planner, executor, human gate, claims, receipts (Python 3.12, OpenCV 5.0.0) | built; 75/75 tests pass |
+| Perception, planner, executor, human gate, claims, receipts (Python 3.12, OpenCV 5.0.0) | built; synthetic evaluation and receipt/tamper tests recorded in the repository |
 | Judge dashboard + API (`/`, `/healthz`, `/api/scenarios`, `/api/run`, `/api/verify`) as one Lambda handler, also served locally | built; tested locally and on a linux/arm64 Lambda base image |
-| AWS: API Gateway HTTP API + Lambda arm64 + CloudWatch + budget alert, one SAM stack | template validated (`sam validate --lint`, `cfn-lint`), built for arm64; **TODO(step 3): deployed** |
+| AWS: API Gateway HTTP API + Lambda arm64 + CloudWatch + budget alert, one SAM stack | deployed; fresh public `/healthz` reports OpenCV 5.0.0 on aarch64; smoke evidence in `docs/submission/` |
 | Authenticated evidence intake, approvals, DynamoDB with TTL, private S3 for opt-in depth snippets | phase 2: code and local tests only, deliberately **not** in the first deploy |
-| Real OAK-D depth input and clip recorder | **TODO(step 4)**: new opt-in code; the prototype reads synthetic or pre-recorded `.npz` clips |
+| Real OAK-D depth input and clip recorder | opt-in native recorder verified on hardware; three 300-frame takes archived locally; calibrated replay remains open |
 
 **Privacy by construction.** The camera's colour sensor feeds only the on-chip detector; only stereo depth reaches the host. No code path reads,
 writes or sends a picture, and a test scans code, data and run outputs for image/video files and imaging calls. Depth still reveals occupancy,
@@ -161,7 +158,7 @@ Per-call timings on a 168x144 zone crop (Apple M4 Pro, CPU only, `guetteur bench
 | `resize_INTER_AREA_6x8` | 0.004 | 0.004 |
 
 Whole loop, both zones, per frame (perception + planner + executor): median **8.6 ms**, p95 11.6 ms, p99 12.4 ms, against a 200 ms budget at 5 fps.
-We have not benchmarked against OpenCV 4 and make no OpenCV 4 comparison claim. Timings on Lambda arm64 have not been measured: **TODO(step 3)**.
+We have not benchmarked against OpenCV 4 and make no OpenCV 4 comparison claim. Fresh Lambda request timings are reported in section 6; these are individual samples, not a cold-start benchmark.
 
 ## 6. AWS deployment
 
@@ -175,7 +172,7 @@ Guardrails, checked statically by `deploy/check_guardrails.py` and read back aft
 
 | Guardrail | Setting |
 | --- | --- |
-| Concurrency cap | reserved concurrency on the API function (5 by default; dropped to 0 only if a new account's quota cannot fit it, in which case the API throttle is the only cap, and the script says so) |
+| Concurrency cap | no reservation in this deployment: the account quota could not support one. Template parameter 0 omits the reservation; it does not set Lambda concurrency to zero. API throttling remains enabled |
 | API throttling | 5 requests/s, burst 10 on every route |
 | Log retention | 7 days on both log groups |
 | No public S3 | the stack creates no bucket; the phase-2 bucket is private with a full public-access block |
@@ -186,10 +183,22 @@ builds a tarball containing the prebuilt arm64 layer and function, so CloudShell
 layer is an aarch64 build, runs `sam deploy` non-interactively, then smoke-tests `/healthz` (must report `opencv 5.0.0` on `aarch64`) and `/api/run`.
 
 Validation done locally: `sam validate --lint`, `cfn-lint`, `sam build`, `bash -n` and `shellcheck` on the scripts, a stubbed dry run of the whole script, and an import-and-run of the built layer and
-function on a **linux/arm64 AWS Lambda base image** (healthz reports `opencv 5.0.0`, `aarch64`; scenario passes with receipts proven). No AWS API was called.
+function on a **linux/arm64 AWS Lambda base image** (healthz reports `opencv 5.0.0`, `aarch64`; scenario passes with receipts proven). Those were pre-deployment checks. The endpoint was subsequently deployed; fresh runtime checks are recorded below.
 
-**Endpoint:** TODO(step 3): `https://<api-id>.execute-api.us-west-2.amazonaws.com/` (replace after deploy).
-**Lambda timings and cold start:** TODO(step 3).
+**Endpoint:** https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/
+
+**Fresh deployed checks (2026-10-14, seed 0, synthetic):**
+
+| Check | Observed result | Server total |
+| --- | --- | --- |
+| Subtle removal, rule planner | one recheck, one true alert, no miss | 5375.9 ms |
+| Same input, naive planner | no recheck, one miss | 5415.0 ms |
+| Shelf removal, gate timeout | one request, one timeout, zero published alerts | 4660.6 ms |
+| Lens obstructed | one true sensor-fault alert | 2539.8 ms |
+| Subthreshold removal | documented miss retained | 4767.5 ms |
+| Double the subtle-removal claim | verifier reports `proven: false` | not benchmarked |
+
+These are single request samples reported by the deployed handler, not latency percentiles or an isolated cold-start measurement. JSON outputs: `docs/submission/`. Cold-start latency remains unmeasured.
 
 ## 7. Evaluation
 
@@ -240,15 +249,23 @@ event, not a scene event; with the human gate set to time out, nothing is publis
 
 ### 7.4 Live-camera results
 
-**TODO(step 4).** Recordings of depth only from the OAK-D PoE in three conditions (empty shelf or door, a person walking through, an item removed), labelled by the operator, run through the identical
-loop, with the same metrics reported next to the synthetic ones. Before any real-data number is reported, the focal-length constant, the noise model and the zone geometry must be refit on real
-frames (the synthetic generator assumes 320x240, a 72 degree field of view and Gaussian noise), with tuning only on a held-out split. Until then: **no real-world accuracy claim is made.**
+Three depth-only takes were recorded on 2026-10-14. Each contains 300 native 640x400 frames over approximately 60 seconds. Archive hashes, frame counts, timestamps and clean shutdown were checked. The operator confirmed the walkthrough and item removal. Raw depth stays private; the sanitized integrity manifest is `docs/submission/capture-integrity.json`.
 
-| Condition | clips | frames | agent success | false alerts | misses | notes |
-| --- | --- | --- | --- | --- | --- | --- |
-| empty shelf / door | TODO | TODO | TODO | TODO | TODO | TODO |
-| person walkthrough | TODO | TODO | TODO | TODO | TODO | TODO |
-| item removed | TODO | TODO | TODO | TODO | TODO | TODO |
+| Condition | clips | frames | archive hash | shutdown | real-scene detection result |
+| --- | --- | --- | --- | --- | --- |
+| empty baseline | 1 | 300 | verified | clean | not measured |
+| person walkthrough | 1 | 300 | verified | clean | not measured |
+| item removed | 1 | 300 | verified | clean | not measured |
+
+These are capture-integrity results, not accuracy results. Exact event intervals, calibrated geometry/noise and a held-out evaluation split remain open. Native 640x400 frames must not be silently treated as the synthetic 320x240 geometry. No real-world accuracy claim is made.
+
+### 7.5 What we learned from deployment and capture
+
+- **Camera shutdown is part of correctness.** A capture could reach its frame target and still crash the SDK during teardown. Physical A/B checks isolated the stop order; stopping CAM_C before CAM_B and draining queues produced clean handoffs. Recovery was checked independently of archive integrity.
+- **Deployment validation needs the service API.** The initial HTTP API deployment failed because its access-log format omitted `$context.requestId`. Correcting the format allowed deployment; a passing local template check had not established deployability.
+- **Cloud quotas change the guardrail set.** The account could not support the requested concurrency reservation. The deployment records that omission explicitly instead of claiming a cap that is absent.
+- **Evidence categories must stay separate.** Recorded frames establish what was captured; operator labels establish what was intended; calibrated replay establishes detector performance. None substitutes for the next.
+- **Verification must be challenged.** The tamper suite exposed a flawed test: moving a whole-frame sensor fault to another region leaves it true. The revised wrong-time test and the original 23/24 result are both disclosed.
 
 ## 8. Failure cases
 
@@ -266,8 +283,8 @@ frames (the synthetic generator assumes 320x240, a 72 degree field of view and G
 * **Latency is dominated by the persistence rule** (10 frames = 2 s at 5 fps); a real deployment would use a longer hold to avoid nuisance alerts.
 * **Receipt independence is partial** (shared input, shared claimed region); a wrongly pinned input cannot be caught, only identified by its digest.
 * **The planner is rule-based.** The LLM slot is an interface and is not wired to a model. The loop still satisfies "image or video results influence a subsequent plan, tool call, action, or request for human approval", and the policy layer is what bounds any future model.
-* **Live mode is not built:** the depth tap from the camera, the opt-in clip recorder, and the evidence-reduced labelling are planned work.
-* **AWS timings are unmeasured;** the cloud approval path is code plus local tests and has never run on AWS.
+* **Real-time product integration remains open:** the opt-in native depth recorder is verified, but calibrated detector replay and live edge-to-cloud integration are not complete.
+* **AWS cold-start performance is unmeasured.** Individual synthetic request timings are recorded above. Authenticated cloud approvals remain code plus local tests only.
 * **Single-camera, two fixed zones** in the prototype; no tracking of individuals, by design.
 
 ## 10. Responsible use and disclosure
@@ -276,13 +293,13 @@ frames (the synthetic generator assumes 320x240, a 72 degree field of view and G
 * Human control: alerts require a person's approval; silence means no alert; claims carry their evidence basis; failures and limits are published.
 * Truthful labelling: synthetic data is marked synthetic everywhere; the LLM planner is described as an interface until a model is actually wired.
 * **AI assistance disclosure.** The entry was built with AI coding assistance. The agent in the product is deterministic code with an optional LLM slot; we do not claim that using an assistant to write the entry is itself the agentic behaviour being judged.
-* Public endpoint security: scenario names and small JSON only, no uploads, no visitor-chosen paths, body-size limit, API throttling, reserved concurrency, no secrets in the repository.
+* Public endpoint security: scenario names and small JSON only, no uploads, no visitor-chosen paths, body-size limit, API throttling, no reserved-concurrency reservation in this account, no secrets in the repository.
 
 ## 11. Reproducing this
 
 ```bash
 uv sync                                   # pinned: opencv-python-headless==5.0.0.93, numpy==2.5.4, pytest==9.1.1
-uv run pytest                             # 75 tests, about 2 minutes, includes the real verifier and tamper tests
+uv run pytest                             # includes the real verifier and tamper tests
 uv run guetteur demo                      # narrated demo, no camera
 uv run guetteur eval                      # all scenarios x 3 seeds x 3 planners -> eval/results.json
 uv run guetteur bench                     # per-frame runtime on this machine -> eval/runtime.json
@@ -292,13 +309,13 @@ uv run guetteur verify-ledger runs/<run>/receipts.md
 
 Environment of the numbers above: Apple M4 Pro, Python 3.12.15, OpenCV 5.0.0, NumPy 2.5.4, CPU only. Logs: `logs/eval.txt`, `logs/eval-rerun.txt`, `logs/bench.txt`, `logs/demo.txt`, `logs/pytest-last.txt`.
 
-## 12. Open items (TODO)
+## 12. Open work and scope limits
 
 | Item | Blocked on |
 | --- | --- |
-| Live-camera results (section 7.4) | camera session and labelling (step 4) |
-| AWS endpoint URL and Lambda timings (section 6) | deploy in the owner's account (step 3) |
-| Evidence-reduced labelling for live claims | live tap (step 4) |
+| Real-scene accuracy (section 7.4) | exact interval labels, calibration and held-out replay |
+| Cold-start benchmark | isolated, repeated measurement; endpoint and smoke timings already verified |
+| Authenticated edge/cloud approval workflow | phase-2 integration and deployed negative tests |
 | Optional: LLM planner wired behind the same policy | decision on model access |
 
 ## Appendix A. Diagram sources

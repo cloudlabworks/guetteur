@@ -1,0 +1,42 @@
+{
+  "synthetic": true,
+  "scenario": "subtle_item_removed",
+  "seed": 0,
+  "planner": "naive-threshold",
+  "gate": "approve",
+  "note": "A low item (25 mm relief, ambiguous in a single frame) is taken at frame 60: the agent has to ask for more evidence before it claims anything.",
+  "score": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1,
+    "latency_frames": [],
+    "behaviours_missing": [
+      "min_rechecks"
+    ],
+    "success": false,
+    "known_miss": false
+  },
+  "counters": {
+    "frames": 145,
+    "planner_calls": 111,
+    "skipped_not_salient": 179,
+    "skipped_paused": 0,
+    "rechecks": 0,
+    "pauses": 0,
+    "degrades": 0,
+    "compensations": 0,
+    "requests": 0,
+    "approved": 0,
+    "denied": 0,
+    "timeouts": 0,
+    "policy_rejections": 0
+  },
+  "trace": [],
+  "claims": [],
+  "alerts": [],
+  "receipts": {},
+  "runtime_ms": {
+    "server_total": 5415.0,
+    "median_frame_loop": 32.15
+  }
+}

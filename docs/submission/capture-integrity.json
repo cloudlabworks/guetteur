@@ -1,0 +1,48 @@
+{
+  "recorded_date": "2026-10-14",
+  "scope": "Archive integrity only; no calibrated replay or real-world accuracy result. Raw depth remains private.",
+  "captures": [
+    {
+      "condition": "empty baseline",
+      "complete": true,
+      "valid_frames": 300,
+      "shape": [
+        400,
+        640
+      ],
+      "hash_matches": true,
+      "depth_sha256": "ae1da0f9fe889f106482062a935af804e4484e1689e8401c69f61c4f5ec443f8",
+      "mean_valid_fraction": 0.7324408072916666,
+      "shutdown_clean": true,
+      "evaluation_ready": false
+    },
+    {
+      "condition": "person walkthrough",
+      "complete": true,
+      "valid_frames": 300,
+      "shape": [
+        400,
+        640
+      ],
+      "hash_matches": true,
+      "depth_sha256": "37619eb48709781750b51e5d22f1b3b86015c56571d72be15fc7c7f3a9bce89e",
+      "mean_valid_fraction": 0.7277738020833334,
+      "shutdown_clean": true,
+      "evaluation_ready": false
+    },
+    {
+      "condition": "item removal",
+      "complete": true,
+      "valid_frames": 300,
+      "shape": [
+        400,
+        640
+      ],
+      "hash_matches": true,
+      "depth_sha256": "c1b763cdf32d39cb41d3498d5638898df8d8d334b445e3deea0c917ee8030c51",
+      "mean_valid_fraction": 0.7332942838541666,
+      "shutdown_clean": true,
+      "evaluation_ready": false
+    }
+  ]
+}

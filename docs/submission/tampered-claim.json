@@ -1,0 +1,11 @@
+{
+  "numpy-region-stats": {
+    "pass": false,
+    "detail": "object_removed: measured +24 mm vs asserted +48 mm; 98% of 784 region pixels moved that way"
+  },
+  "opencv-region-stats": {
+    "pass": false,
+    "detail": "object_removed: frame-mean shift +25 mm (standard error 0.2) vs asserted +48 mm"
+  },
+  "proven": false
+}
