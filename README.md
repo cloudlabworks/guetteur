@@ -4,7 +4,9 @@
 using **OpenCV 5** evidence, stops at a **human gate** before anything outward-facing happens, and attaches a
 **re-runnable receipt** to every claim it makes.
 
-> **Status (2026-10-14): AWS judge demo deployed; physical depth capture verified.**
+> **Status (2026-10-15): submitted to the OpenCV AI Competition powered by AWS.**
+> [Devpost entry](https://devpost.com/software/guetteur) · [Narrated demo (3:52)](https://youtu.be/_r8mIRTFzFA) · [Submission receipt](docs/submission/submission-receipt.json).
+> AWS judge demo deployed; physical depth capture verified.
 > Try [the live dashboard](https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/).
 > The published accuracy results remain **synthetic-only**. Three physical OAK-D depth takes
 > (empty baseline, walkthrough, item removal) each contain 300 integrity-checked 640x400 frames;

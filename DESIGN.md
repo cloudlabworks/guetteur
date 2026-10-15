@@ -1,7 +1,7 @@
 # Guetteur (Team Drift) — design document
 
 *OpenCV AI Competition 2026, powered by AWS. Target: Overall entry that also qualifies for the **Agentic Vision Award**.*
-Design baseline of 2026-10-12, status corrected 2026-10-14. ~~Nothing is deployed, registered, submitted or published.~~ The public repository and AWS judge endpoint are live; native physical depth capture is verified. The competition submission is not yet complete. The day-by-day schedule below is the original plan, not a completion claim. Current evidence is in `docs/submission/` and the technical report.
+Design baseline of 2026-10-12, status corrected 2026-10-14. ~~Nothing is deployed, registered, submitted or published.~~ The public repository and AWS judge endpoint are live; native physical depth capture is verified. ~~The competition submission is not yet complete.~~ Submitted 2026-10-15; Devpost reports SUBMITTED, 5/5 steps. See `docs/submission/submission-receipt.json`. The day-by-day schedule below is the original plan, not a completion claim. Current evidence is in `docs/submission/` and the technical report.
 Rule citations use the short names defined in `docs/RULES_NOTES.md` (DP-Overview, DP-Rules, OCV).
 
 ## 0. Read this first: three things that can sink the entry

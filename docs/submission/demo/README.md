@@ -16,4 +16,4 @@ node scripts/record_submission_demo.cjs
 
 The recorder writes the video, per-scene review frames, manifest and captured AWS JSON responses to the ignored output directory. It uses a fresh unauthenticated browser and records only the public synthetic demonstration. Captured frames remain ordered; each segment is conformed to its narration duration. It does not capture account consoles or private camera data.
 
-A final submission receipt will identify the hosted video and source revision. Hosted video availability, not a local render alone, is required for submission.
+Hosted video: https://youtu.be/_r8mIRTFzFA (unlisted; signed-out playback verified). Final receipt: `../submission-receipt.json`. `captions.srt` supplies approximate sentence-level timings from the narration; it is available in the repository, not uploaded as a YouTube caption track.

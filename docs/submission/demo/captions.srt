@@ -1,0 +1,181 @@
+1
+00:00:00,000 --> 00:00:10,380
+This is Guetteur, built by Alex Alvord, Cloud Lab Works, Team Drift, for the
+Open C V AI Competition powered by A W S.
+
+2
+00:00:10,380 --> 00:00:18,165
+It is a depth-vision agent that asks for more evidence before acting, and
+produces claims you can check.
+
+3
+00:00:18,165 --> 00:00:20,760
+This demonstration uses synthetic depth scenes.
+
+4
+00:00:21,760 --> 00:00:31,239
+The deployed path is a browser dashboard, A P I Gateway, and an ARM sixty-four
+Lambda running Open C V five.
+
+5
+00:00:31,239 --> 00:00:35,752
+Open C V filters depth, extracts regions, and estimates motion.
+
+6
+00:00:35,752 --> 00:00:42,522
+A deterministic planner can recheck a zone, pause it, compensate for drift, or
+request approval.
+
+7
+00:00:42,522 --> 00:00:46,133
+The next perception call depends on that evidence.
+
+8
+00:00:46,133 --> 00:00:52,452
+NumPy and Open C V independently remeasure each claim against the same pinned
+input.
+
+9
+00:00:52,452 --> 00:00:58,320
+The approval selector here is a simulation, not an authenticated remote approval
+service.
+
+10
+00:00:59,320 --> 00:01:02,835
+Here is the live A W S dashboard.
+
+11
+00:01:02,835 --> 00:01:07,668
+We select subtle item removed, the rule planner, and simulated approval.
+
+12
+00:01:07,668 --> 00:01:09,865
+The single-frame evidence is ambiguous.
+
+13
+00:01:09,865 --> 00:01:13,820
+Watch the decision trace: recheck zone requests seven frames.
+
+14
+00:01:13,820 --> 00:01:18,653
+Integrating those frames gives the planner enough evidence to request approval.
+
+15
+00:01:18,653 --> 00:01:23,047
+The trace records the evidence, the action, and the outcome.
+
+16
+00:01:23,047 --> 00:01:27,880
+One approved alert leaves the demo, and both receipt checks pass.
+
+17
+00:01:28,880 --> 00:01:34,074
+Now run the same scene and seed through the naive threshold baseline.
+
+18
+00:01:34,074 --> 00:01:37,104
+It does not request the additional evidence.
+
+19
+00:01:37,104 --> 00:01:41,432
+The result is a missed event and a failed task.
+
+20
+00:01:41,432 --> 00:01:48,790
+This comparison tests whether the perception-decision loop changes the outcome,
+rather than simply explaining a fixed result.
+
+21
+00:01:49,790 --> 00:01:55,016
+Next, a shelf item is removed, but the simulated approval times out.
+
+22
+00:01:55,016 --> 00:01:57,629
+Detection and publication are different outcomes.
+
+23
+00:01:57,629 --> 00:02:02,419
+The system requests approval, records the timeout, and publishes no alert.
+
+24
+00:02:02,419 --> 00:02:09,823
+The score measures detection requests against ground truth; it does not mean an
+outward alert was sent.
+
+25
+00:02:09,823 --> 00:02:12,000
+The alerts section shows none.
+
+26
+00:02:13,000 --> 00:02:18,034
+Back on the subtle-removal result, both estimators pass the original claim.
+
+27
+00:02:18,034 --> 00:02:21,696
+Now we deliberately double the claimed depth change.
+
+28
+00:02:21,696 --> 00:02:25,357
+The deployed verifier remeasures the pinned synthetic input.
+
+29
+00:02:25,357 --> 00:02:29,476
+Both checks fail and the altered claim is rejected.
+
+30
+00:02:29,476 --> 00:02:33,137
+Small changes within the documented tolerance can pass.
+
+31
+00:02:33,137 --> 00:02:40,460
+And two estimators over one input cannot establish that the input itself depicts
+the intended event.
+
+32
+00:02:41,460 --> 00:02:44,818
+This is the failure case: subthreshold item removed.
+
+33
+00:02:44,818 --> 00:02:48,596
+The change is below the detector's effective noise floor.
+
+34
+00:02:48,596 --> 00:02:53,214
+The dashboard reports a missed event and labels the documented failure.
+
+35
+00:02:53,214 --> 00:03:00,770
+We keep this miss in the results instead of turning it into a success with a
+different definition.
+
+36
+00:03:01,770 --> 00:03:11,632
+Across thirty-three synthetic development-set runs, the rule planner succeeds on
+thirty, compared with twelve for the raw threshold baseline.
+
+37
+00:03:11,632 --> 00:03:18,899
+Event precision is one point zero zero and recall is zero point eight six.
+
+38
+00:03:18,899 --> 00:03:26,685
+The corrected tamper suite rejects twenty-four of twenty-four cases; the initial
+twenty-three-of-twenty-four result remains documented.
+
+39
+00:03:26,685 --> 00:03:32,913
+Separately, three physical depth-only takes have verified archive integrity and
+clean shutdown.
+
+40
+00:03:32,913 --> 00:03:37,585
+That is capture evidence, not measured real-world detection accuracy.
+
+41
+00:03:37,585 --> 00:03:46,409
+The M I T repository includes pinned dependencies, tests, deployment
+instructions, the technical report, and raw results.
+
+42
+00:03:46,409 --> 00:03:51,080
+AI coding assistance and this synthetic narration are disclosed.

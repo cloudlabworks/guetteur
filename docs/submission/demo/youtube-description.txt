@@ -1,0 +1,22 @@
+Guetteur — Alex Alvord / Cloud Lab Works / Team Drift.
+OpenCV AI Competition 2026, powered by AWS. Agentic Vision entry.
+
+A live recording of the deployed AWS synthetic-depth dashboard: OpenCV 5 perception, evidence-driven rule planning, a simulated approval gate, and independently remeasured claims.
+
+Try the AWS demo: https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/
+Source (MIT): https://github.com/cloudlabworks/guetteur
+Technical report: https://github.com/cloudlabworks/guetteur/blob/main/docs/report/report.pdf
+Evaluation and failure cases: https://github.com/cloudlabworks/guetteur/blob/main/docs/EVALUATION.md
+
+0:00 Guetteur · active perception with receipts
+0:21 OpenCV 5 does the perception work on AWS
+0:59 Ambiguity changes the next tool call
+1:28 Same input · naive baseline misses the change
+1:49 No answer means no published alert
+2:13 A hash is not enough · remeasure the claim
+2:41 Documented failure · below the noise floor
+3:01 Results, limits, and reproducibility
+
+All accuracy metrics are synthetic development-set results, not real-world accuracy. The AWS dashboard does not stream a live camera. Approve/deny/timeout is a simulation, not authenticated remote approval. Three separate physical depth-only recordings have verified archive integrity and clean shutdown; calibration and detector evaluation remain open.
+
+The planner is deterministic code, not an LLM. AI coding assistance was used. Narration is synthetic: Kokoro-82M, am_michael (Apache-2.0), not a voice clone. No third-party music or private camera footage.

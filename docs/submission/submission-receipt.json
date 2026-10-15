@@ -1,0 +1,29 @@
+{
+  "status": "SUBMITTED",
+  "steps_complete": "5/5",
+  "verified_at": "2026-10-15T17:05:23.641710+00:00",
+  "competition": "OpenCV AI Competition 2026, powered by AWS",
+  "submission_id": 1234496,
+  "project": "https://devpost.com/software/guetteur",
+  "award_opt_in": "Agentic Vision Award",
+  "video": "https://youtu.be/_r8mIRTFzFA",
+  "video_visibility": "unlisted",
+  "video_duration_seconds": 232.156406,
+  "video_signed_out_playback_verified": true,
+  "repository": "https://github.com/cloudlabworks/guetteur",
+  "submitted_source_revision": "a65bbb5722e2d99102586e1d38c71ffd69aa9d12",
+  "endpoint": "https://nm4p814bp0.execute-api.us-west-2.amazonaws.com/",
+  "technical_report": "docs/report/report.pdf",
+  "tests": {
+    "passed": 94,
+    "duration_seconds": 99.08
+  },
+  "evidence_tier": "high",
+  "instruments": [
+    "Devpost authenticated browser: Project submitted banner and SUBMITTED 5/5 status",
+    "Unauthenticated curl: project HTTP 200, updated story, YouTube embed ID, AWS endpoint and competition",
+    "Unauthenticated browser: hosted YouTube playback readyState 4 and currentTime >1 second",
+    "Git remote plus anonymous raw download: published source and matching report SHA-256"
+  ],
+  "limitations": "All accuracy results are synthetic development-set results. Physical capture integrity verified; calibrated real-depth detector accuracy and authenticated cloud approvals remain future work."
+}
