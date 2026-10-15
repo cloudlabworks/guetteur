@@ -1,6 +1,6 @@
 # Real-depth capture: operator run sheet
 
-Status: recorder prepared; physical-camera capture and calibrated replay are not yet verified. Existing evaluation results remain synthetic.
+Status: a native empty-scene baseline has been captured; calibrated replay and real-scene evaluation remain open. Existing evaluation scores remain synthetic.
 
 ## What to record
 
@@ -37,7 +37,7 @@ capture_root="$HOME/guetteur-captures/$(date +%Y%m%d-%H%M%S)"
   --confirm-depth-recording
 ```
 
-The recorder refuses an existing destination or one inside this source repository. It retains partial data on failure and labels it incomplete. A successful process exit means capture completed, **not** that perception or detection passed.
+The recorder refuses an existing destination or one inside this source repository. It retains partial data on failure and labels it incomplete. A successful process exit requires capture completion and checked camera teardown, **not** that perception or detection passed. New metadata includes `shutdown_clean`; earlier archives without that field retain their original evidence and must not be relabeled retroactively.
 
 ## Archive and evaluation boundary
 
@@ -50,3 +50,47 @@ For each real run report: capture hash, scene and labels, baseline interval, val
 ## Final submission recordings
 
 These depth takes are evidence inputs, not the final video. Separately record a dashboard demonstration of at most five minutes: architecture, a labeled real replay, synthetic baseline comparison, approval and timeout, receipt verification, a documented miss, and the limits. Do not label a local replay as a live AWS camera stream.
+
+## Clean camera handoff and DepthAI 3.11.0 teardown
+
+The observed "shutdown crash" can be an **inherited crash report**, not a crash
+caused by the current take. In the lab reproduction, the device reported a dump
+immediately after connection, before the depth pipeline started. Kestrel previously
+used Python's default SIGTERM behavior; stopping its supervisor terminated the
+process without closing the PoE device. Kestrel now handles SIGTERM/SIGINT by
+leaving its loop and closing the pipeline normally.
+
+The recorder checks for an inherited crash dump before creating a capture. If one
+exists, it rejects the attempt without recording; SDK close preserves the report
+locally under the no-upload policy. Fix the previous owner's handoff, inspect the
+report, and obtain readiness again. Do not silently clear or disable crash checks.
+
+For orderly stereo teardown, the recorder sends stop-streaming to **CAM_C
+(right), then CAM_B (left)**, draining in-flight depth messages for 0.5 seconds
+after each command. Pipeline stop/wait and device close run even if a stop command
+fails. Success is finalized only after checking the device crash flag and closed
+pipeline/device state. Failure retains frames with `complete=false` and
+`shutdown_clean=false`.
+
+The [upstream synchronized camera-stop issue](https://github.com/luxonis/depthai-core/pull/2034)
+was still open when inspected on 2026-10-14. Camera ordering was the initial
+hypothesis, but changing that alone did not fix the inherited report. This is an
+application lifecycle/handoff fix, not an SDK upgrade or a firmware patch.
+
+For a non-recording check, pause the known camera owner as above, then run:
+
+```sh
+printf 'DepthAI Python interpreter path: '
+read -r capture_python
+printf 'OAK device ID: '
+read -r capture_device
+"$capture_python" scripts/check_depth_shutdown.py \
+  --device-id "$capture_device" --seconds 60 --confirm-camera-test
+```
+
+The check uses the recorder's production pipeline and teardown functions. It
+checks native uint16 frames in memory, writes no frame files, and reports startup
+crash state, frame count, shape, device crash/closed flags, and pipeline state.
+Inspect the SDK log as well as the exit code. Restore the previous camera owner
+afterward. Test **fresh handoffs**, not just consecutive runs while monitoring is
+paused: a clean second run can conceal a bad first handoff.

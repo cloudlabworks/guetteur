@@ -71,7 +71,7 @@ class Capture:
         self.valid_fractions.append(float(np.count_nonzero(frame) / frame.size))
         self.last_t = elapsed
 
-    def finish(self, complete, calibration=None, error=None):
+    def finish(self, complete, calibration=None, error=None, shutdown_clean=None):
         if self.data is not None:
             self.data.flush()
         count = len(self.timestamps)
@@ -91,9 +91,71 @@ class Capture:
                     depth_sha256=digest.hexdigest() if count else None,
                     camera_intrinsics=calibration, baseline_seconds=12,
                     labels_status='operator event-time labels required',
-                    evaluation_ready=False, error=error)
+                    evaluation_ready=False, error=error, shutdown_clean=shutdown_clean)
         (self.folder/'capture.json').write_text(json.dumps(meta, indent=2)+'\n')
         return meta
+
+
+def require_clean_camera(device):
+    """Reject inherited watchdog/crash reports before creating a recording.
+
+    SDK close preserves the report locally using the existing no-upload policy.
+    Do not attribute an inherited report to this capture or silently clear it.
+    """
+    try:
+        if device.hasCrashDump():
+            raise RuntimeError('Pre-existing camera crash report; no recording started. Check the previous camera owner.')
+    except BaseException:
+        device.close()
+        raise
+
+
+def build_depth_pipeline(dai, device):
+    """Build depth-only streams with explicit right/left shutdown controls."""
+    pipeline = dai.Pipeline(device)
+    try:
+        left = pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_B, sensorFps=15)
+        right = pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_C, sensorFps=15)
+        stereo = pipeline.create(dai.node.StereoDepth)
+        left.requestOutput((640, 400)).link(stereo.left)
+        right.requestOutput((640, 400)).link(stereo.right)
+        controls = (right.inputControl.createInputQueue(), left.inputControl.createInputQueue())
+        queue = stereo.depth.createOutputQueue(maxSize=2, blocking=False)
+        return pipeline, queue, controls
+    except BaseException:
+        device.close()
+        raise
+
+
+def shutdown_depth_pipeline(dai, pipeline, device, queue, controls):
+    """Quiesce CAM_C then CAM_B before tearing down the host output path.
+
+    DepthAI 3.11.0 / RVC2 can report a firmware crash on immediate teardown.
+    Keep consuming in-flight depth while each stop takes effect. This sequence
+    passed a physical-camera check but does not cure inherited watchdog reports.
+    Always check startup state and never suppress SDK logs or crash checks.
+    Related upstream camera-order defect: luxonis/depthai-core#2034.
+    """
+    try:
+        if pipeline.isRunning() and not device.isClosed():
+            for control in controls:
+                stop = dai.CameraControl()
+                stop.setStopStreaming()
+                control.send(stop)
+                drain_until = time.monotonic() + 0.5
+                while time.monotonic() < drain_until:
+                    queue.tryGet()  # discard; never write shutdown frames
+                    time.sleep(0.005)
+    finally:
+        try:
+            pipeline.stop()
+        finally:
+            try:
+                pipeline.wait()
+            finally:
+                device.close()
+    if device.hasCrashed() or not device.isClosed() or pipeline.isRunning():
+        raise RuntimeError('DepthAI teardown failed: device crash or unclosed pipeline')
 
 
 def main(argv=None):
@@ -119,16 +181,13 @@ def main(argv=None):
     if info is None:
         print('Camera unavailable or owned by another process. No capture started.',file=sys.stderr)
         return 2
-    cap=None;calibration=None
+    cap=None;calibration=None;shutdown_clean=None
     try:
         device = dai.Device(info)
-        with dai.Pipeline(device) as pipeline:
-            left=pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_B, sensorFps=15)
-            right=pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_C, sensorFps=15)
-            stereo=pipeline.create(dai.node.StereoDepth)
-            left.requestOutput((640,400)).link(stereo.left)
-            right.requestOutput((640,400)).link(stereo.right)
-            queue=stereo.depth.createOutputQueue(maxSize=2,blocking=False)
+        device.setMaxReconnectionAttempts(0)
+        require_clean_camera(device)
+        pipeline, queue, controls = build_depth_pipeline(dai, device)
+        try:
             pipeline.start()
             cap=Capture(args.out,args.scene,args.seconds,args.fps)
             started=time.monotonic();last_frame=started;last_slot=-1
@@ -147,12 +206,21 @@ def main(argv=None):
                 if now-last_frame > 10:
                     raise TimeoutError('No depth frames for ten seconds')
                 time.sleep(.005)
-            meta=cap.finish(time.monotonic()-started >= args.seconds,calibration)
-            print(json.dumps({k:meta[k] for k in ['complete','valid_frames','shape','evaluation_ready']}))
-            return 0 if meta['complete'] else 2
+            complete=time.monotonic()-started >= args.seconds
+        finally:
+            shutdown_clean=False
+            shutdown_depth_pipeline(dai, pipeline, device, queue, controls)
+            shutdown_clean=True
+        # Finalize success only after teardown has actually completed.
+        meta=cap.finish(complete,calibration,shutdown_clean=shutdown_clean)
+        print(json.dumps({k:meta[k] for k in ['complete','valid_frames','shape','evaluation_ready','shutdown_clean']}))
+        return 0 if meta['complete'] else 2
     except (Exception,KeyboardInterrupt) as e:
-        if cap is not None:cap.finish(False,calibration,type(e).__name__)
-        print('Capture incomplete: '+type(e).__name__+'. Any partial data is retained and labeled incomplete.',file=sys.stderr)
+        if cap is not None:
+            cap.finish(False,calibration,type(e).__name__,shutdown_clean=shutdown_clean)
+            print('Capture incomplete: '+type(e).__name__+'. Any partial data is retained and labeled incomplete.',file=sys.stderr)
+        else:
+            print('No capture started: '+type(e).__name__+': '+str(e),file=sys.stderr)
         return 2
 
 if __name__=='__main__':

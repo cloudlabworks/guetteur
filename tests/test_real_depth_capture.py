@@ -42,3 +42,83 @@ def test_sampling_does_not_accumulate_sensor_jitter():
     arrivals=[i/15 + .004*(i%3) for i in range(900)]
     slots={m.capture_slot(t,5) for t in arrivals}
     assert len(slots)==300
+
+class FakePipeline:
+    def __init__(self, events, fail_stop=False):
+        self.events, self.running, self.fail_stop = events, True, fail_stop
+    def isRunning(self):return self.running
+    def stop(self):
+        self.events.append('pipeline-stop'); self.running=False
+        if self.fail_stop:raise RuntimeError('stop failed')
+    def wait(self):self.events.append('pipeline-wait')
+
+class FakeDevice:
+    def __init__(self, events, crashed=False):
+        self.events, self.closed, self.crashed = events, False, crashed
+    def close(self):self.events.append('device-close');self.closed=True
+    def isClosed(self):return self.closed
+    def hasCrashed(self):return self.crashed
+
+class FakeControl:
+    def __init__(self, events, name, fail=False):self.events,self.name,self.fail=events,name,fail
+    def send(self, msg):
+        assert msg.stopping
+        self.events.append(self.name)
+        if self.fail:raise RuntimeError('control failed')
+
+class FakeStop:
+    def setStopStreaming(self):self.stopping=True
+
+class FakeDai:
+    CameraControl=FakeStop
+
+class FakeQueue:
+    def __init__(self, events):self.events=events
+    def tryGet(self):self.events.append('drain')
+
+def shutdown_fakes(monkeypatch, *, crashed=False, fail_control=False, fail_stop=False):
+    events=[]
+    clock=iter(i*.25 for i in range(100))
+    monkeypatch.setattr(m.time,'monotonic',lambda:next(clock))
+    monkeypatch.setattr(m.time,'sleep',lambda _:None)
+    pipeline=FakePipeline(events,fail_stop)
+    device=FakeDevice(events,crashed)
+    controls=(FakeControl(events,'CAM_C',fail_control),FakeControl(events,'CAM_B'))
+    return events,(FakeDai,pipeline,device,FakeQueue(events),controls)
+
+def test_shutdown_stops_right_then_left_before_output_teardown(monkeypatch):
+    events,args=shutdown_fakes(monkeypatch)
+    m.shutdown_depth_pipeline(*args)
+    assert events==['CAM_C','drain','CAM_B','drain','pipeline-stop','pipeline-wait','device-close']
+
+@pytest.mark.parametrize('failure',['control','stop'])
+def test_shutdown_still_closes_device_when_cleanup_step_fails(monkeypatch,failure):
+    events,args=shutdown_fakes(monkeypatch,fail_control=failure=='control',fail_stop=failure=='stop')
+    with pytest.raises(RuntimeError):m.shutdown_depth_pipeline(*args)
+    assert events[-3:]==['pipeline-stop','pipeline-wait','device-close']
+
+def test_sdk_crash_flag_is_not_silent_success(monkeypatch):
+    events,args=shutdown_fakes(monkeypatch,crashed=True)
+    with pytest.raises(RuntimeError,match='teardown failed'):m.shutdown_depth_pipeline(*args)
+    assert events[-1]=='device-close'
+
+def test_failed_shutdown_preserves_depth_and_marks_incomplete(tmp_path):
+    c=m.Capture(tmp_path/'clip','empty',15,1)
+    for i in range(15):c.add(np.ones((2,2),np.uint16),i+.1)
+    meta=c.finish(False,error='RuntimeError',shutdown_clean=False)
+    assert meta['valid_frames']==15 and meta['complete'] is False
+    assert meta['shutdown_clean'] is False and meta['depth_sha256']
+    assert np.load(c.folder/'depth.npy').shape==(16,2,2)
+
+@pytest.mark.parametrize('has_dump',[False,True])
+def test_startup_rejects_inherited_report_before_recording(has_dump):
+    events=[]
+    device=FakeDevice(events)
+    device.hasCrashDump=lambda:has_dump
+    if has_dump:
+        with pytest.raises(RuntimeError,match='Pre-existing camera crash report'):
+            m.require_clean_camera(device)
+        assert events==['device-close']
+    else:
+        m.require_clean_camera(device)
+        assert events==[]
