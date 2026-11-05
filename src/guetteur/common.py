@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -42,6 +43,15 @@ def depth_digest(depth: np.ndarray) -> str:
     h.update(json.dumps(list(a.shape)).encode())
     h.update(a.tobytes())
     return h.hexdigest()
+
+
+def safe_child(base: str | Path, *parts: str) -> Path:
+    """`base/parts...` resolved, refusing anything that lands outside `base` (`..`, absolute parts, symlinks out)."""
+    root = os.path.realpath(base)
+    full = os.path.realpath(os.path.join(root, *parts))
+    if not full.startswith(root + os.sep):
+        raise ValueError(f"path escapes {base}: {os.path.join(*parts)}")
+    return Path(full)
 
 
 @dataclass

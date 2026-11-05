@@ -13,6 +13,8 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from .common import safe_child
+
 CLAIM_VERSION = 1
 
 
@@ -41,11 +43,11 @@ def sha256_file(path: str | Path) -> str:
 
 
 def write_claims(claims: list[Claim], out_dir: str | Path) -> list[Path]:
-    out = Path(out_dir) / "claims"
+    out = safe_child(out_dir, "claims")
     out.mkdir(parents=True, exist_ok=True)
     paths = []
     for c in claims:
-        p = out / f"{c.id}.json"
+        p = safe_child(out, f"{c.id}.json")             # a claim id never names a file outside claims/
         p.write_text(c.to_json())
         paths.append(p)
     return paths

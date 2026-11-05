@@ -12,7 +12,7 @@ from pathlib import Path
 
 from . import synth
 from .agent import Agent, HumanGate, RunResult, ScriptedGate
-from .common import depth_digest, save_clip
+from .common import depth_digest, safe_child, save_clip
 from .perception import PerceptionParams
 from .planner import NaivePlanner, Planner, PlannerConfig, RulePlanner
 from .receipts import Claim, ledger_text, sha256_file, write_claims
@@ -26,24 +26,36 @@ def make_planner(name: str) -> Planner:
     return PLANNERS[name]()
 
 
+def _own_key(table: dict, key: str) -> str:
+    """The table's own copy of `key`, so a run id (and the directory named after it) holds no caller-supplied string."""
+    for k in table:
+        if k == key:
+            return k
+    raise KeyError(key)
+
+
 def run_scenario(name: str, seed: int = 0, planner: str | Planner = "rule", gate: HumanGate | str = "approve",
                  out_dir: str | Path | None = None, keep_clip: bool = False) -> tuple[RunResult, dict]:
     """Returns (result, meta). With out_dir, writes trace.jsonl, claims/, receipts.md, summary.json under out_dir/<run>/."""
-    sc = synth.scenarios()[name]
+    scenarios = synth.scenarios()
+    name = _own_key(scenarios, name)
+    sc = scenarios[name]
+    seed = int(seed)
     depth = synth.render(sc, seed)
     digest = depth_digest(depth)
     pl = make_planner(planner) if isinstance(planner, str) else planner
     g = ScriptedGate(gate) if isinstance(gate, str) else gate
-    run_id = f"{name}_s{seed}_{planner if isinstance(planner, str) else getattr(pl, 'name', 'planner')}"
+    run_id = f"{name}_s{seed}_{_own_key(PLANNERS, planner) if isinstance(planner, str) else getattr(pl, 'name', 'planner')}"
+    run_dir = safe_child(out_dir, run_id) if out_dir is not None else None
     clip_path = None
-    if out_dir is not None and keep_clip:
-        clip_path = str((Path(out_dir) / run_id / "clip.npz"))
+    if run_dir is not None and keep_clip:
+        clip_path = str(run_dir / "clip.npz")
         save_clip(clip_path, depth, dict(synthetic=True, scenario=name, seed=seed))
     clip_ref = dict(path=_rel(clip_path), scenario=name, seed=seed, digest=digest)
     res = Agent(pl, g, guardrails=planner != "naive").run(depth, run_id, clip_ref)
     meta = dict(scenario=name, seed=seed, run=run_id, digest=digest, expect=sc.expect, truth=sc.truth, note=sc.note)
-    if out_dir is not None:
-        write_run(res, meta, Path(out_dir) / run_id)
+    if run_dir is not None:
+        write_run(res, meta, run_dir)
     return res, meta
 
 
