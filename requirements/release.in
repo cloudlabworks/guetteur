@@ -1,0 +1,4 @@
+# .github/workflows/release.yml: build the sdist and wheel without build isolation,
+# so the build backend comes from this hashed list too.
+build
+hatchling

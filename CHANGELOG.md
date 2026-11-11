@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0]
+
+First PyPI release.
+
+- `pip install guetteur` installs the `guetteur` command (Python 3.12; pinned `opencv-python-headless==5.0.0.93` and `numpy==2.5.4`).
+- The wheel carries the vendored prove-it-done verifier, so `guetteur verify-ledger`, `run --verify`, `demo` and `eval` work from an install. Outside a git checkout, ledger paths are relative to the working directory.
+- The sdist leaves out run logs, evaluation results and submission material (`logs/`, `eval/`, `docs/submission/`, `docs/report/`).
+- Status unchanged: accuracy results are synthetic-only.
+
 ## 2026-11-03
 
 No versioned release yet. This section records the repository as of 2026-11-03.

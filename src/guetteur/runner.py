@@ -17,8 +17,16 @@ from .perception import PerceptionParams
 from .planner import NaivePlanner, Planner, PlannerConfig, RulePlanner
 from .receipts import Claim, ledger_text, sha256_file, write_claims
 
-ROOT = Path(__file__).resolve().parents[2]
-VERIFIER = ROOT / "third_party" / "prove_it_done" / "verify_receipts.py"
+_PKG = Path(__file__).resolve().parent
+_CHECKOUT_VERIFIER = _PKG.parents[1] / "third_party" / "prove_it_done" / "verify_receipts.py"
+if _CHECKOUT_VERIFIER.is_file():
+    # git checkout (src/guetteur): ledger paths are relative to the repo root
+    ROOT = _PKG.parents[1]
+    VERIFIER = _CHECKOUT_VERIFIER
+else:
+    # installed wheel: the same verifier ships inside the package; ledger paths are relative to the working directory
+    ROOT = Path.cwd()
+    VERIFIER = _PKG / "_vendor" / "prove_it_done" / "verify_receipts.py"
 PLANNERS = {"rule": RulePlanner, "naive": NaivePlanner, "naive-guarded": NaivePlanner}
 
 
@@ -92,7 +100,7 @@ class Verdict:
 
 
 def verify_ledger(ledger: str | Path, min_instruments: int = 2, timeout: int = 300) -> Verdict:
-    """Run the vendored prove-it-done verifier on a ledger, from the repo root, with this interpreter first on PATH."""
+    """Run the vendored prove-it-done verifier on a ledger, from ROOT, with this interpreter first on PATH."""
     env = dict(os.environ, PATH=str(Path(sys.executable).parent) + os.pathsep + os.environ.get("PATH", ""))
     p = subprocess.run([sys.executable, str(VERIFIER), "--ledger", str(_rel(str(ledger))), "--min-instruments", str(min_instruments)],
                        cwd=ROOT, env=env, capture_output=True, text=True, timeout=timeout)

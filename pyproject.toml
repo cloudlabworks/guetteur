@@ -9,13 +9,32 @@ description = "Team Drift: a privacy-first active-perception agent. OpenCV 5 dep
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = "MIT"
-license-files = ["LICENSE"]
+license-files = ["LICENSE", "third_party/prove_it_done/LICENSE"]
+authors = [{ name = "Alex Alvord", email = "325058966+cloudlabworks@users.noreply.github.com" }]
+keywords = ["opencv", "depth", "computer-vision", "agent", "active-perception", "privacy", "receipts", "human-in-the-loop"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
 # opencv-python-headless (not opencv-python): no GUI deps, and a manylinux aarch64 wheel
 # exists for 5.0.0.93, so the same pin runs on Apple Silicon and on AWS Lambda arm64 (Graviton).
 dependencies = [
   "opencv-python-headless==5.0.0.93",
   "numpy==2.5.4",
 ]
+
+[project.urls]
+Homepage = "https://cloudlabworks.dev/oss/guetteur"
+Source = "https://github.com/cloudlabworks/guetteur"
+Issues = "https://github.com/cloudlabworks/guetteur/issues"
 
 [dependency-groups]
 dev = ["pytest==9.1.1"]
@@ -25,6 +44,15 @@ guetteur = "guetteur.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/guetteur"]
+
+# The vendored prove-it-done verifier runs `guetteur verify-ledger`, `run --verify`, `demo` and `eval`;
+# an installed wheel finds it inside the package (see runner.py).
+[tool.hatch.build.targets.wheel.force-include]
+"third_party/prove_it_done/verify_receipts.py" = "guetteur/_vendor/prove_it_done/verify_receipts.py"
+"third_party/prove_it_done/PROVENANCE.md" = "guetteur/_vendor/prove_it_done/PROVENANCE.md"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/logs", "/eval", "/docs/submission", "/docs/report"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

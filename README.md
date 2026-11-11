@@ -48,6 +48,9 @@ uv run guetteur bench                      # per-frame runtime on this machine -
 uv run guetteur serve                      # the judge dashboard + API on http://127.0.0.1:8080/
 ```
 
+From PyPI instead of a clone (Python 3.12): `pip install guetteur`, then the same commands without `uv run`
+(for example `guetteur demo`). Outputs go under the working directory.
+
 Re-verify any ledger yourself: `uv run guetteur verify-ledger runs/<run>/receipts.md` (runs the vendored
 `third_party/prove_it_done/verify_receipts.py`, pinned to prove-it-done commit `d897534`).
 
