@@ -37,7 +37,7 @@ Source = "https://github.com/cloudlabworks/guetteur"
 Issues = "https://github.com/cloudlabworks/guetteur/issues"
 
 [dependency-groups]
-dev = ["pytest==9.1.1"]
+dev = ["pytest==9.2.0"]
 
 [project.scripts]
 guetteur = "guetteur.cli:main"
