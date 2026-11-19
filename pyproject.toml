@@ -28,7 +28,7 @@ classifiers = [
 # exists for 5.0.0.93, so the same pin runs on Apple Silicon and on AWS Lambda arm64 (Graviton).
 dependencies = [
   "opencv-python-headless==5.0.0.93",
-  "numpy==2.5.4",
+  "numpy==2.5.5",
 ]
 
 [project.urls]
