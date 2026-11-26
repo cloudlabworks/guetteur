@@ -27,7 +27,7 @@ classifiers = [
 # opencv-python-headless (not opencv-python): no GUI deps, and a manylinux aarch64 wheel
 # exists for 5.0.0.93, so the same pin runs on Apple Silicon and on AWS Lambda arm64 (Graviton).
 dependencies = [
-  "opencv-python-headless==5.0.0.93",
+  "opencv-python-headless==5.1.0.95",
   "numpy==2.5.4",
 ]
 
